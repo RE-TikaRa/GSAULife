@@ -3,6 +3,8 @@ package com.tika.gsaulife.academic.data
 import com.tika.gsaulife.academic.SchoolSystem
 import com.tika.gsaulife.academic.model.Ranking
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
 import okhttp3.Request
@@ -27,6 +29,7 @@ internal class XgfwRepository(
             .build()
         try {
             client.newCall(request).execute().use { response ->
+                currentCoroutineContext().ensureActive()
                 if (response.code == 401 || response.code == 403) {
                     return@withContext sessionExpired(session.version)
                 }
@@ -41,6 +44,7 @@ internal class XgfwRepository(
                     sessionExpired(session.version)
                 } else {
                     val rankings = XgfwParser.rankings(text)
+                    currentCoroutineContext().ensureActive()
                     if (
                         sessions.runIfCurrent(SchoolSystem.STUDENT_AFFAIRS, session.version) {
                             cache.saveRankings(rankings)

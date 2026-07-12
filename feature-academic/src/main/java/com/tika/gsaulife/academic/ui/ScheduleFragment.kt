@@ -24,6 +24,7 @@ import com.tika.gsaulife.academic.databinding.AcademicFragmentScheduleBinding
 import com.tika.gsaulife.academic.databinding.AcademicSheetCourseBinding
 import com.tika.gsaulife.academic.model.Course
 import com.tika.gsaulife.academic.model.SchedulePage
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.TimeZone
@@ -44,6 +45,7 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
     private var courses: List<Course> = emptyList()
     private var selectedWeek = 1
     private var maxWeek = DEFAULT_MAX_WEEK
+    private var loadJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,9 +76,9 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
     }
 
     override fun reload() {
-        if (_binding == null) return
+        if (_binding == null || loadJob?.isActive == true) return
         showLoading()
-        viewLifecycleOwner.lifecycleScope.launch {
+        loadJob = viewLifecycleOwner.lifecycleScope.launch {
             when (val result = repository.schedule()) {
                 is AcademicResult.Ok -> render(result.data)
                 AcademicResult.LoggedOut -> {

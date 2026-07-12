@@ -18,6 +18,7 @@ import com.tika.gsaulife.academic.databinding.AcademicItemScoreComponentBinding
 import com.tika.gsaulife.academic.databinding.AcademicSheetScoreBinding
 import com.tika.gsaulife.academic.model.Grade
 import com.tika.gsaulife.academic.model.ScoreDetail
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.Date
@@ -30,6 +31,7 @@ internal class GradesFragment : Fragment(), AcademicPage {
     private val repository by lazy { jwxtRepository(requireContext()) }
     private val cache by lazy { AcademicCache.get(requireContext()) }
     private val sessions by lazy { SchoolSessionStore.get(requireContext()) }
+    private var loadJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,9 +55,9 @@ internal class GradesFragment : Fragment(), AcademicPage {
     }
 
     override fun reload() {
-        if (_binding == null) return
+        if (_binding == null || loadJob?.isActive == true) return
         showLoading()
-        viewLifecycleOwner.lifecycleScope.launch {
+        loadJob = viewLifecycleOwner.lifecycleScope.launch {
             when (val result = repository.grades()) {
                 is AcademicResult.Ok -> render(result.data)
                 AcademicResult.LoggedOut -> {

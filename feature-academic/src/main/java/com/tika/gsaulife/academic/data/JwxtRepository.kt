@@ -6,6 +6,8 @@ import com.tika.gsaulife.academic.model.Grade
 import com.tika.gsaulife.academic.model.SchedulePage
 import com.tika.gsaulife.academic.model.ScoreDetail
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
 import okhttp3.Request
@@ -96,11 +98,12 @@ internal class JwxtRepository(
         .header("Cookie", cookieHeader)
         .also { if (referer != null) it.header("Referer", referer) }
 
-    private fun <T> AcademicResult<T>.cacheIfCurrent(
+    private suspend fun <T> AcademicResult<T>.cacheIfCurrent(
         version: Long,
         save: (T) -> Unit,
     ): AcademicResult<T> = when (this) {
         is AcademicResult.Ok -> {
+            currentCoroutineContext().ensureActive()
             if (sessions.runIfCurrent(SchoolSystem.ACADEMIC, version) { save(data) }) {
                 this
             } else {
@@ -110,17 +113,24 @@ internal class JwxtRepository(
         else -> this
     }
 
-    private fun <T> request(
+    private suspend fun <T> request(
         request: Request,
         version: Long,
         parse: (String) -> T,
     ): AcademicResult<T> = try {
         client.newCall(request).execute().use { response ->
+            currentCoroutineContext().ensureActive()
             if (response.code == 401 || response.code == 403) return sessionExpired(version)
             if (response.code in 300..399) return sessionExpired(version)
             if (!response.isSuccessful) return error(version, "HTTP ${response.code}")
             val text = response.body.string()
-            if (isLoginPage(text)) sessionExpired(version) else AcademicResult.Ok(parse(text))
+            if (isLoginPage(text)) {
+                sessionExpired(version)
+            } else {
+                val data = parse(text)
+                currentCoroutineContext().ensureActive()
+                AcademicResult.Ok(data)
+            }
         }
     } catch (exception: IOException) {
         error(version, exception.message ?: "网络错误")

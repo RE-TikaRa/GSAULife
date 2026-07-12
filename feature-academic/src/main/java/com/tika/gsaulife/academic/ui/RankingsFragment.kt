@@ -12,6 +12,7 @@ import com.tika.gsaulife.academic.data.AcademicCache
 import com.tika.gsaulife.academic.data.AcademicResult
 import com.tika.gsaulife.academic.databinding.AcademicFragmentListBinding
 import com.tika.gsaulife.academic.model.Ranking
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal class RankingsFragment : Fragment(), AcademicPage {
@@ -21,6 +22,7 @@ internal class RankingsFragment : Fragment(), AcademicPage {
     private val binding get() = _binding!!
     private val repository by lazy { xgfwRepository(requireContext()) }
     private val cache by lazy { AcademicCache.get(requireContext()) }
+    private var loadJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,9 +46,9 @@ internal class RankingsFragment : Fragment(), AcademicPage {
     }
 
     override fun reload() {
-        if (_binding == null) return
+        if (_binding == null || loadJob?.isActive == true) return
         showLoading()
-        viewLifecycleOwner.lifecycleScope.launch {
+        loadJob = viewLifecycleOwner.lifecycleScope.launch {
             when (val result = repository.rankings()) {
                 is AcademicResult.Ok -> render(result.data)
                 AcademicResult.LoggedOut -> {
