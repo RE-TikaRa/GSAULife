@@ -69,7 +69,7 @@ internal class SchoolSessionStore private constructor(context: Context) {
         preferences.getLong(system.versionKey, 0)
 
     companion object {
-        const val JWGL_BASE = "http://jwgl.gsau.edu.cn"
+        const val JWGL_BASE = "https://jwgl.gsau.edu.cn"
         const val XGFW_BASE = "https://xgfw.gsau.edu.cn"
 
         @Volatile
