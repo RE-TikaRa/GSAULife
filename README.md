@@ -43,6 +43,35 @@ KEY_PASSWORD
 ```
 
 工作流会执行全部测试、Lint、Debug 与签名 Release 构建，验证 APK 签名后发布 `GSAULife-v*.apk`。
+版本码按 `主版本 × 1000000 + 次版本 × 1000 + 修订版本` 生成，发布标签必须高于已有稳定版标签。
+
+本地构建其他版本时使用：
+
+```bash
+VERSION_NAME=1.0.1 ./gradlew :app:assembleRelease
+```
+
+首次发布使用：
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+gh run list --workflow Release
+```
+
+## GitHub 代理
+
+`worker/gh-proxy.js` 部署到 Cloudflare Worker `gh-proxy`，并绑定 `gh.re-tikara.fun`：
+
+```bash
+wrangler deploy --config worker/wrangler.toml --keep-vars
+```
+
+Worker Secret `GITHUB_TOKEN` 只需读取公开 Release 的权限。首次配置使用：
+
+```bash
+wrangler secret put GITHUB_TOKEN --config worker/wrangler.toml
+```
 
 ## 数据
 
