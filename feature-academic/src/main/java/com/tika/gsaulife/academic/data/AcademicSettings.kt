@@ -13,7 +13,7 @@ internal class AcademicSettings private constructor(context: Context) {
 
     fun calibrateWeek(term: String, date: Long, week: Int) {
         val value = JSONObject().apply {
-            put("date", atStartOfDay(date))
+            put("day", localEpochDay(date))
             put("week", week)
         }
         preferences.edit { putString(termKey(term), value.toString()) }
@@ -24,45 +24,42 @@ internal class AcademicSettings private constructor(context: Context) {
     }
 
     fun termStart(term: String): Long? {
-        val raw = preferences.getString(termKey(term), null) ?: return null
-        val value = JSONObject(raw)
-        return termStartFromCalibration(value.getLong("date"), value.getInt("week"))
+        val day = termStartDay(term) ?: return null
+        return dateFromEpochDay(day)
     }
 
     fun currentWeek(term: String, now: Long = System.currentTimeMillis()): Int? {
-        val start = termStart(term) ?: return null
-        return weekOf(start, now)
+        val start = termStartDay(term) ?: return null
+        return weekOfDays(start, localEpochDay(now))
     }
 
     fun clear() {
         preferences.edit { clear() }
     }
 
-    private fun termKey(term: String): String = "week:$term"
+    private fun termKey(term: String): String = "week-day:$term"
+
+    private fun termStartDay(term: String): Long? {
+        val raw = preferences.getString(termKey(term), null) ?: return null
+        val value = JSONObject(raw)
+        return value.getLong("day") - (value.getInt("week") - 1) * 7L
+    }
 
     companion object {
-        fun atStartOfDay(millis: Long): Long = Calendar.getInstance().run {
-            timeInMillis = millis
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-            timeInMillis
+        fun weekOf(start: Long, day: Long): Int? {
+            return weekOfDays(localEpochDay(start), localEpochDay(day))
         }
 
-        fun weekOf(start: Long, day: Long): Int? {
-            val elapsedDays = localEpochDay(day) - localEpochDay(start)
+        private fun weekOfDays(start: Long, day: Long): Int? {
+            val elapsedDays = day - start
             if (elapsedDays < 0) return null
             return (elapsedDays / 7 + 1).toInt()
         }
 
-        fun termStartFromCalibration(date: Long, week: Int): Long = Calendar.getInstance().run {
-            timeInMillis = atStartOfDay(date)
-            add(Calendar.DATE, -(week - 1) * 7)
-            timeInMillis
-        }
+        fun termStartFromCalibration(date: Long, week: Int): Long =
+            dateFromEpochDay(localEpochDay(date) - (week - 1) * 7L)
 
-        private fun localEpochDay(millis: Long): Long {
+        internal fun localEpochDay(millis: Long): Long {
             val local = Calendar.getInstance().apply { timeInMillis = millis }
             val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
                 clear()
@@ -73,6 +70,21 @@ internal class AcademicSettings private constructor(context: Context) {
                 )
             }
             return TimeUnit.MILLISECONDS.toDays(utc.timeInMillis)
+        }
+
+        internal fun dateFromEpochDay(day: Long): Long {
+            val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+                timeInMillis = TimeUnit.DAYS.toMillis(day)
+            }
+            return Calendar.getInstance().run {
+                clear()
+                set(
+                    utc.get(Calendar.YEAR),
+                    utc.get(Calendar.MONTH),
+                    utc.get(Calendar.DAY_OF_MONTH),
+                )
+                timeInMillis
+            }
         }
 
         @Volatile

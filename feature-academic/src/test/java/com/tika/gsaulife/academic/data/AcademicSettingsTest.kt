@@ -56,4 +56,18 @@ class AcademicSettingsTest {
             TimeZone.setDefault(original)
         }
     }
+
+    @Test
+    fun `切换时区后开学日期保持年月日`() {
+        val original = TimeZone.getDefault()
+        try {
+            TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"))
+            val stored = AcademicSettings.localEpochDay(day(2026, 3, 2))
+
+            TimeZone.setDefault(TimeZone.getTimeZone("America/Los_Angeles"))
+            assertEquals(day(2026, 3, 2), AcademicSettings.dateFromEpochDay(stored))
+        } finally {
+            TimeZone.setDefault(original)
+        }
+    }
 }
