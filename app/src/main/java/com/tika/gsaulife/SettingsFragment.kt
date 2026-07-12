@@ -27,6 +27,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
     private var updatingControls = false
+    private var pendingUpdateResult: UpdateChecker.Result? = null
 
     private val academicLogin = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -118,6 +119,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         renderIdentity()
         renderTheme()
         renderRefreshMode()
+        pendingUpdateResult?.let {
+            pendingUpdateResult = null
+            showUpdateResult(it)
+        }
     }
 
     override fun onDestroyView() {
@@ -206,28 +211,34 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.updateButton.isEnabled = false
         binding.updateButton.setText(R.string.settings_checking_update)
         viewLifecycleOwner.lifecycleScope.launch {
-            when (val result = UpdateChecker.check(BuildConfig.VERSION_NAME)) {
-                is UpdateChecker.Result.NewVersion -> MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.settings_new_version, result.version))
-                    .setMessage(R.string.settings_new_version_message)
-                    .setNegativeButton(R.string.settings_cancel, null)
-                    .setPositiveButton(R.string.settings_open_release) { _, _ ->
-                        openUri(result.pageUrl)
-                    }
-                    .show()
-                is UpdateChecker.Result.UpToDate -> Snackbar.make(
-                    binding.root,
-                    R.string.settings_up_to_date,
-                    Snackbar.LENGTH_SHORT
-                ).show()
-                is UpdateChecker.Result.Error -> Snackbar.make(
-                    binding.root,
-                    getString(R.string.settings_update_failed, result.message),
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
-            binding.updateButton.isEnabled = true
-            binding.updateButton.setText(R.string.settings_check_update)
+            val result = UpdateChecker.check(BuildConfig.VERSION_NAME)
+            val currentBinding = _binding ?: return@launch
+            currentBinding.updateButton.isEnabled = true
+            currentBinding.updateButton.setText(R.string.settings_check_update)
+            if (isResumed) showUpdateResult(result) else pendingUpdateResult = result
+        }
+    }
+
+    private fun showUpdateResult(result: UpdateChecker.Result) {
+        when (result) {
+            is UpdateChecker.Result.NewVersion -> MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.settings_new_version, result.version))
+                .setMessage(R.string.settings_new_version_message)
+                .setNegativeButton(R.string.settings_cancel, null)
+                .setPositiveButton(R.string.settings_open_release) { _, _ ->
+                    openUri(result.pageUrl)
+                }
+                .show()
+            is UpdateChecker.Result.UpToDate -> Snackbar.make(
+                binding.root,
+                R.string.settings_up_to_date,
+                Snackbar.LENGTH_SHORT
+            ).show()
+            is UpdateChecker.Result.Error -> Snackbar.make(
+                binding.root,
+                getString(R.string.settings_update_failed, result.message),
+                Snackbar.LENGTH_LONG
+            ).show()
         }
     }
 
