@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun renderNavigation(tab: Tab) {
         binding.navAcademic.isSelected = tab == Tab.ACADEMIC
+        binding.navCard.isSelected = tab == Tab.CARD
         binding.navSettings.isSelected = tab == Tab.SETTINGS
         binding.navCard.alpha = if (tab == Tab.CARD) 1f else 0.78f
     }
