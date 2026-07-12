@@ -2,6 +2,11 @@ plugins {
     id("com.android.application")
 }
 
+val appVersionName = System.getenv("VERSION_NAME") ?: "1.0.0"
+val appVersionCode = appVersionName.split('.').map(String::toInt).let { (major, minor, patch) ->
+    major * 1_000_000 + minor * 1_000 + patch
+}
+
 android {
     namespace = "com.tika.gsaulife"
     compileSdk {
@@ -14,8 +19,8 @@ android {
         applicationId = "com.tika.gsaulife"
         minSdk = 24
         targetSdk = 37
-        versionCode = (System.getenv("VERSION_CODE") ?: "1").toInt()
-        versionName = System.getenv("VERSION_NAME") ?: "1.0.0"
+        versionCode = System.getenv("VERSION_CODE")?.toInt() ?: appVersionCode
+        versionName = appVersionName
     }
 
     val storeFilePath = System.getenv("KEYSTORE_FILE")
