@@ -41,13 +41,11 @@ internal object RefreshController {
             AccountStore.get(context).current() != null
         ) {
             RefreshService.start(context)
-        } else {
-            RefreshService.stop(context)
         }
     }
 
     fun enterPaymentScreen(context: Context) {
-        RefreshService.stop(context)
+        if (getMode(context) == RefreshMode.CONTINUOUS) RefreshService.stop(context)
     }
 
     fun leavePaymentScreen(context: Context) {
