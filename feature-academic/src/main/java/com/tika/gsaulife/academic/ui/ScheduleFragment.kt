@@ -29,6 +29,7 @@ import java.util.Calendar
 import java.util.TimeZone
 
 private const val DEFAULT_MAX_WEEK = 20
+private const val MAX_CALIBRATION_WEEK = 99
 
 internal class ScheduleFragment : Fragment(), AcademicPage {
     override val destination = AcademicDestination.SCHEDULE
@@ -147,7 +148,7 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
         if (term.isEmpty() || courses.isEmpty()) return
         val input = EditText(requireContext()).apply {
             inputType = InputType.TYPE_CLASS_NUMBER
-            setText(selectedWeek.toString())
+            setText(getString(R.string.academic_number, selectedWeek))
             selectAll()
             maxLines = 1
         }
@@ -171,12 +172,15 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
         dialog.setOnShowListener {
             dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
                 val week = input.text.toString().toIntOrNull()
-                if (week == null || week !in 1..maxWeek) {
-                    input.error = getString(R.string.academic_schedule_calibrate_error, maxWeek)
+                if (week == null || !isValidCalibrationWeek(week)) {
+                    input.error = getString(
+                        R.string.academic_schedule_calibrate_error,
+                        MAX_CALIBRATION_WEEK,
+                    )
                     return@setOnClickListener
                 }
                 settings.calibrateWeek(term, System.currentTimeMillis(), week)
-                selectWeek(week)
+                applyCurrentWeek(week)
                 dialog.dismiss()
             }
             input.requestFocus()
@@ -195,7 +199,7 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
             )
             .build()
         picker.addOnPositiveButtonClickListener { date ->
-            settings.setTermStart(term, date)
+            settings.setTermStart(term, fromUtcDate(date))
             applyCurrentWeek(settings.currentWeek(term))
         }
         picker.show(parentFragmentManager, "academic-term-start")
@@ -273,6 +277,9 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
 internal fun scheduleMaxWeek(courseWeeks: Iterable<Int>, currentWeek: Int?): Int =
     maxOf(DEFAULT_MAX_WEEK, courseWeeks.maxOrNull() ?: 0, currentWeek ?: 0)
 
+internal fun isValidCalibrationWeek(week: Int?): Boolean =
+    week != null && week in 1..MAX_CALIBRATION_WEEK
+
 private fun toUtcDate(millis: Long): Long {
     val local = Calendar.getInstance().apply { timeInMillis = millis }
     return Calendar.getInstance(TimeZone.getTimeZone("UTC")).run {
@@ -281,6 +288,19 @@ private fun toUtcDate(millis: Long): Long {
             local.get(Calendar.YEAR),
             local.get(Calendar.MONTH),
             local.get(Calendar.DAY_OF_MONTH),
+        )
+        timeInMillis
+    }
+}
+
+internal fun fromUtcDate(millis: Long): Long {
+    val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { timeInMillis = millis }
+    return Calendar.getInstance().run {
+        clear()
+        set(
+            utc.get(Calendar.YEAR),
+            utc.get(Calendar.MONTH),
+            utc.get(Calendar.DAY_OF_MONTH),
         )
         timeInMillis
     }

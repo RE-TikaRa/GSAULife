@@ -16,7 +16,6 @@ import androidx.core.view.updatePadding
 import com.tika.gsaulife.academic.SchoolSystem
 import com.tika.gsaulife.academic.data.AcademicCache
 import com.tika.gsaulife.academic.data.AcademicHttp
-import com.tika.gsaulife.academic.data.AcademicSettings
 import com.tika.gsaulife.academic.data.SchoolSessionStore
 import com.tika.gsaulife.academic.databinding.AcademicActivityLoginBinding
 
@@ -80,7 +79,6 @@ class LoginActivity : AppCompatActivity() {
         finishingLogin = true
         sessions.save(system, cookies)
         AcademicCache.get(this).clear(system)
-        if (system == SchoolSystem.ACADEMIC) AcademicSettings.get(this).clear()
         CookieManager.getInstance().flush()
         setResult(RESULT_OK)
         finish()

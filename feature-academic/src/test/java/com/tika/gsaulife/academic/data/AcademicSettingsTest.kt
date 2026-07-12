@@ -4,6 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 import java.util.Calendar
+import java.util.TimeZone
 
 class AcademicSettingsTest {
     private fun day(year: Int, month: Int, date: Int): Long = Calendar.getInstance().run {
@@ -43,5 +44,16 @@ class AcademicSettingsTest {
             day(2026, 3, 2),
             AcademicSettings.termStartFromCalibration(day(2026, 7, 13), 20),
         )
+    }
+
+    @Test
+    fun `夏令时变化不影响教学周`() {
+        val original = TimeZone.getDefault()
+        try {
+            TimeZone.setDefault(TimeZone.getTimeZone("America/Los_Angeles"))
+            assertEquals(20, AcademicSettings.weekOf(day(2026, 3, 2), day(2026, 7, 13)))
+        } finally {
+            TimeZone.setDefault(original)
+        }
     }
 }

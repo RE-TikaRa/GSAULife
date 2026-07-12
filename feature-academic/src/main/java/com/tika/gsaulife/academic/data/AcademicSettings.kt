@@ -5,6 +5,7 @@ import androidx.core.content.edit
 import org.json.JSONObject
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
+import java.util.TimeZone
 
 internal class AcademicSettings private constructor(context: Context) {
     private val preferences =
@@ -50,7 +51,7 @@ internal class AcademicSettings private constructor(context: Context) {
         }
 
         fun weekOf(start: Long, day: Long): Int? {
-            val elapsedDays = TimeUnit.MILLISECONDS.toDays(atStartOfDay(day) - atStartOfDay(start))
+            val elapsedDays = localEpochDay(day) - localEpochDay(start)
             if (elapsedDays < 0) return null
             return (elapsedDays / 7 + 1).toInt()
         }
@@ -59,6 +60,19 @@ internal class AcademicSettings private constructor(context: Context) {
             timeInMillis = atStartOfDay(date)
             add(Calendar.DATE, -(week - 1) * 7)
             timeInMillis
+        }
+
+        private fun localEpochDay(millis: Long): Long {
+            val local = Calendar.getInstance().apply { timeInMillis = millis }
+            val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+                clear()
+                set(
+                    local.get(Calendar.YEAR),
+                    local.get(Calendar.MONTH),
+                    local.get(Calendar.DAY_OF_MONTH),
+                )
+            }
+            return TimeUnit.MILLISECONDS.toDays(utc.timeInMillis)
         }
 
         @Volatile
