@@ -117,6 +117,7 @@ internal class JwxtRepository(
     ): AcademicResult<T> = try {
         client.newCall(request).execute().use { response ->
             if (response.code == 401 || response.code == 403) return sessionExpired(version)
+            if (response.code in 300..399) return sessionExpired(version)
             if (!response.isSuccessful) return error(version, "HTTP ${response.code}")
             val text = response.body.string()
             if (isLoginPage(text)) sessionExpired(version) else AcademicResult.Ok(parse(text))

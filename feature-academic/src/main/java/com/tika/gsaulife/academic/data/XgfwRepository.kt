@@ -30,6 +30,9 @@ internal class XgfwRepository(
                 if (response.code == 401 || response.code == 403) {
                     return@withContext sessionExpired(session.version)
                 }
+                if (response.code in 300..399) {
+                    return@withContext sessionExpired(session.version)
+                }
                 if (!response.isSuccessful) {
                     return@withContext error(session.version, "HTTP ${response.code}")
                 }

@@ -9,6 +9,7 @@ internal object AcademicHttp {
             "(KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
 
     val client: OkHttpClient = OkHttpClient.Builder()
+        .followRedirects(false)
         .connectTimeout(10, TimeUnit.SECONDS)
         .readTimeout(15, TimeUnit.SECONDS)
         .build()
