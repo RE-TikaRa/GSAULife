@@ -124,6 +124,8 @@ internal class JwxtRepository(
         }
     } catch (exception: IOException) {
         error(version, exception.message ?: "网络错误")
+    } catch (exception: IllegalArgumentException) {
+        error(version, exception.message ?: "教务数据格式错误")
     }
 
     private fun sessionExpired(version: Long): AcademicResult<Nothing> =

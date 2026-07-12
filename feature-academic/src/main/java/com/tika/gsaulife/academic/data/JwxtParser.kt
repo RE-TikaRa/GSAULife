@@ -14,7 +14,7 @@ object JwxtParser {
 
     fun grades(html: String): List<Grade> {
         val result = mutableListOf<Grade>()
-        for (row in Jsoup.parse(html).select("#dataList tr")) {
+        for (row in dataTable(html).select("tr")) {
             val cells = row.select("td")
             if (cells.size < 12) continue
             val href = cells[4].selectFirst("a")?.attr("href").orEmpty()
@@ -37,7 +37,7 @@ object JwxtParser {
     }
 
     fun scoreDetail(html: String): ScoreDetail {
-        val row = Jsoup.parse(html).select("#dataList tr")
+        val row = dataTable(html).select("tr")
             .map { it.select("td") }
             .firstOrNull { it.size >= 4 && it.size % 2 == 0 && text(it[0]) == "1" }
             ?: return ScoreDetail(emptyList(), "")
@@ -54,7 +54,7 @@ object JwxtParser {
 
     fun exams(html: String): List<Exam> {
         val result = mutableListOf<Exam>()
-        for (row in Jsoup.parse(html).select("#dataList tr")) {
+        for (row in dataTable(html).select("tr")) {
             val cells = row.select("td")
             if (cells.size < 8) continue
             result.add(
@@ -69,10 +69,11 @@ object JwxtParser {
         return result
     }
 
-    fun schedulePage(html: String): SchedulePage = SchedulePage(
-        term = currentTerm(html),
-        courses = schedule(html),
-    )
+    fun schedulePage(html: String): SchedulePage {
+        val term = currentTerm(html)
+        require(term.isNotEmpty()) { "教务响应缺少当前学期" }
+        return SchedulePage(term, schedule(html))
+    }
 
     fun currentTerm(html: String): String =
         Jsoup.parse(html).selectFirst("#xnxq01id option[selected]")?.attr("value").orEmpty()
@@ -150,6 +151,9 @@ object JwxtParser {
         Regex("""$key=([^&'")]+)""").find(url)?.groupValues?.get(1).orEmpty()
 
     private fun text(element: Element): String = element.text().trim()
+
+    private fun dataTable(html: String): Element =
+        requireNotNull(Jsoup.parse(html).selectFirst("#dataList")) { "教务响应缺少数据表" }
 
     private val RANGE_RE = Regex("""(\d+)-(\d+)""")
     private val SINGLE_RE = Regex("""(\d+)""")

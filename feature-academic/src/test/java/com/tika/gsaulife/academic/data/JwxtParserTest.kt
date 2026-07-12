@@ -1,6 +1,7 @@
 package com.tika.gsaulife.academic.data
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -81,5 +82,28 @@ class JwxtParserTest {
         val courses = JwxtParser.schedule(fixture("academic_schedule.html"))
         val course = courses.first { it.name == "工程材料" }
         assertTrue(course.weeks.containsAll((1..8).toList()))
+    }
+
+    @Test
+    fun `教务异常页面不解析为空数据`() {
+        val html = "<html><body>系统维护中</body></html>"
+        assertThrows(IllegalArgumentException::class.java) { JwxtParser.grades(html) }
+        assertThrows(IllegalArgumentException::class.java) { JwxtParser.scoreDetail(html) }
+        assertThrows(IllegalArgumentException::class.java) { JwxtParser.exams(html) }
+        assertThrows(IllegalArgumentException::class.java) { JwxtParser.schedulePage(html) }
+    }
+
+    @Test
+    fun `合法空表保留为空数据`() {
+        val table = "<html><body><table id=\"dataList\"></table></body></html>"
+        assertTrue(JwxtParser.grades(table).isEmpty())
+        assertTrue(JwxtParser.scoreDetail(table).components.isEmpty())
+        assertTrue(JwxtParser.exams(table).isEmpty())
+
+        val schedule = JwxtParser.schedulePage(
+            "<select id=\"xnxq01id\"><option value=\"2025-2026-2\" selected></option></select>"
+        )
+        assertEquals("2025-2026-2", schedule.term)
+        assertTrue(schedule.courses.isEmpty())
     }
 }
