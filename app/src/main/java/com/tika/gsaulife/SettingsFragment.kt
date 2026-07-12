@@ -45,11 +45,21 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         _binding = FragmentSettingsBinding.bind(view)
 
         binding.academicLogin.setOnClickListener {
-            academicLogin.launch(AcademicFeature.loginIntent(requireContext(), SchoolSystem.ACADEMIC))
+            academicLogin.launch(
+                AcademicFeature.loginIntent(
+                    requireContext(),
+                    SchoolSystem.ACADEMIC,
+                    AcademicFeature.isLoggedIn(requireContext(), SchoolSystem.ACADEMIC),
+                )
+            )
         }
         binding.studentLogin.setOnClickListener {
             studentLogin.launch(
-                AcademicFeature.loginIntent(requireContext(), SchoolSystem.STUDENT_AFFAIRS)
+                AcademicFeature.loginIntent(
+                    requireContext(),
+                    SchoolSystem.STUDENT_AFFAIRS,
+                    AcademicFeature.isLoggedIn(requireContext(), SchoolSystem.STUDENT_AFFAIRS),
+                )
             )
         }
         binding.logoutAcademic.setOnClickListener { confirmLogout() }

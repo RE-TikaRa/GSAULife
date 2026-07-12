@@ -18,6 +18,7 @@ import com.tika.gsaulife.academic.data.AcademicCache
 import com.tika.gsaulife.academic.data.AcademicHttp
 import com.tika.gsaulife.academic.data.SchoolSessionStore
 import com.tika.gsaulife.academic.databinding.AcademicActivityLoginBinding
+import java.net.URI
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: AcademicActivityLoginBinding
@@ -54,7 +55,6 @@ class LoginActivity : AppCompatActivity() {
         binding.academicWebView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView, url: String?, favicon: android.graphics.Bitmap?) {
                 binding.academicLoginProgress.visibility = View.VISIBLE
-                capture(url)
             }
 
             override fun onPageFinished(view: WebView, url: String?) {
@@ -63,7 +63,14 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         if (savedInstanceState == null || binding.academicWebView.restoreState(savedInstanceState) == null) {
-            binding.academicWebView.loadUrl(startUrl(system))
+            if (intent.getBooleanExtra(EXTRA_FORCE_REAUTH, false)) {
+                cookies.removeAllCookies {
+                    cookies.flush()
+                    binding.academicWebView.loadUrl(startUrl(system))
+                }
+            } else {
+                binding.academicWebView.loadUrl(startUrl(system))
+            }
         }
     }
 
@@ -89,12 +96,7 @@ class LoginActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
     }
 
-    private fun reachedTarget(url: String): Boolean = when (system) {
-        SchoolSystem.ACADEMIC ->
-            "jwgl.gsau.edu.cn" in url && "/jsxsd/framework/" in url
-        SchoolSystem.STUDENT_AFFAIRS ->
-            "xgfw.gsau.edu.cn" in url && "/xsfw/" in url
-    }
+    private fun reachedTarget(url: String): Boolean = reachedSchoolTarget(system, url)
 
     private fun parseCookies(raw: String?): Map<String, String> {
         raw ?: return emptyMap()
@@ -115,11 +117,14 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         private const val EXTRA_SYSTEM = "academic.school_system"
+        private const val EXTRA_FORCE_REAUTH = "academic.force_reauth"
         private const val XGFW_URL =
             "${SchoolSessionStore.XGFW_BASE}/xsfw/sys/jbxxapp/*default/index.do#/wdxx"
 
-        fun intent(context: Context, system: SchoolSystem): Intent =
-            Intent(context, LoginActivity::class.java).putExtra(EXTRA_SYSTEM, system.name)
+        fun intent(context: Context, system: SchoolSystem, forceReauth: Boolean = false): Intent =
+            Intent(context, LoginActivity::class.java)
+                .putExtra(EXTRA_SYSTEM, system.name)
+                .putExtra(EXTRA_FORCE_REAUTH, forceReauth)
 
         private fun startUrl(system: SchoolSystem): String = when (system) {
             SchoolSystem.ACADEMIC -> SchoolSessionStore.JWGL_BASE
@@ -127,3 +132,17 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 }
+
+internal fun reachedSchoolTarget(system: SchoolSystem, url: String): Boolean = runCatching {
+    val uri = URI(url)
+    if (!uri.scheme.equals("https", ignoreCase = true)) return@runCatching false
+    val path = uri.path.orEmpty()
+    when (system) {
+        SchoolSystem.ACADEMIC ->
+            uri.host.equals("jwgl.gsau.edu.cn", ignoreCase = true) &&
+                path.startsWith("/jsxsd/framework/")
+        SchoolSystem.STUDENT_AFFAIRS ->
+            uri.host.equals("xgfw.gsau.edu.cn", ignoreCase = true) &&
+                path.startsWith("/xsfw/")
+    }
+}.getOrDefault(false)

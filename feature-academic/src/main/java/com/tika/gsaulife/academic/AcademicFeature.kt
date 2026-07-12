@@ -16,8 +16,11 @@ object AcademicFeature {
     fun isLoggedIn(context: Context, system: SchoolSystem): Boolean =
         SchoolSessionStore.get(context).isLoggedIn(system)
 
-    fun loginIntent(context: Context, system: SchoolSystem): Intent =
-        LoginActivity.intent(context, system)
+    fun loginIntent(
+        context: Context,
+        system: SchoolSystem,
+        forceReauth: Boolean = false,
+    ): Intent = LoginActivity.intent(context, system, forceReauth)
 
     fun logoutAll(context: Context) {
         SchoolSessionStore.get(context).clearAll()
