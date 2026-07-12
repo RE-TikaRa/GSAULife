@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import com.tika.gsaulife.card.R
+import com.tika.gsaulife.card.LegalAgreementStore
 import com.tika.gsaulife.card.RefreshMode
 import com.tika.gsaulife.card.data.AccountStore
 import com.tika.gsaulife.card.data.PayCodeManager
@@ -24,6 +25,10 @@ import kotlinx.coroutines.launch
 
 class PayWidgetProvider : AppWidgetProvider() {
     override fun onEnabled(context: Context) {
+        if (!LegalAgreementStore.isAccepted(context)) {
+            renderAll(context)
+            return
+        }
         RefreshController.setMode(context, RefreshMode.CONTINUOUS)
         renderAll(context)
     }
@@ -42,6 +47,11 @@ class PayWidgetProvider : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
+        if (!LegalAgreementStore.isAccepted(context)) {
+            RefreshController.stop(context)
+            renderAll(context)
+            return
+        }
         when (intent.action) {
             WidgetExpiry.ACTION -> renderAll(context)
             ACTION_RENDER -> renderAll(
@@ -92,6 +102,23 @@ class PayWidgetProvider : AppWidgetProvider() {
         widgetId: Int
     ) {
         val views = RemoteViews(context.packageName, R.layout.card_widget)
+        if (!LegalAgreementStore.isAccepted(context)) {
+            views.setTextViewText(R.id.card_widget_name, context.getString(R.string.card_widget_add))
+            views.setViewVisibility(R.id.card_widget_qr, View.GONE)
+            views.setViewVisibility(R.id.card_widget_refresh, View.GONE)
+            views.setViewVisibility(R.id.card_widget_hint, View.VISIBLE)
+            views.setTextViewText(
+                R.id.card_widget_hint,
+                context.getString(R.string.card_widget_agreement)
+            )
+            openAppIntent(context)?.let {
+                views.setOnClickPendingIntent(R.id.card_widget_root, it)
+                views.setOnClickPendingIntent(R.id.card_widget_hint, it)
+            }
+            runCatching { manager.updateAppWidget(widgetId, views) }
+                .onFailure { Log.w(TAG, "Unable to update card widget", it) }
+            return
+        }
         val account = AccountStore.get(context).current()
         if (account == null) {
             views.setTextViewText(

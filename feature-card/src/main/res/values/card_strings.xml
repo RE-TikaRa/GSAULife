@@ -40,6 +40,7 @@
     <string name="card_widget_label">甘农生活付款码</string>
     <string name="card_widget_add">甘农生活</string>
     <string name="card_widget_empty">未添加校园卡</string>
+    <string name="card_widget_agreement">打开应用阅读并同意隐私政策</string>
     <string name="card_widget_refresh_hint">点击刷新付款码</string>
     <string name="card_notification_channel">校园卡持续刷新</string>
     <string name="card_notification_channel_description">持续获取当前校园卡的付款码</string>

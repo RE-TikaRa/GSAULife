@@ -5,6 +5,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.tika.gsaulife.card.CardFeature
+import com.tika.gsaulife.card.LegalAgreementStore
 
 class GSAULifeApp : Application(), DefaultLifecycleObserver {
     override fun onCreate() {
@@ -14,6 +15,8 @@ class GSAULifeApp : Application(), DefaultLifecycleObserver {
     }
 
     override fun onStop(owner: LifecycleOwner) {
-        CardFeature.restoreContinuousRefresh(this)
+        if (LegalAgreementStore.isAccepted(this)) {
+            CardFeature.restoreContinuousRefresh(this)
+        }
     }
 }

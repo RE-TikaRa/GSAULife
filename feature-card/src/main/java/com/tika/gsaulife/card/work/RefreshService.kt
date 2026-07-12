@@ -12,6 +12,7 @@ import android.os.IBinder
 import android.os.SystemClock
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.tika.gsaulife.card.LegalAgreementStore
 import com.tika.gsaulife.card.R
 import com.tika.gsaulife.card.data.AccountStore
 import com.tika.gsaulife.card.data.PayCodeManager
@@ -36,6 +37,11 @@ class RefreshService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (!LegalAgreementStore.isAccepted(this)) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            stopSelf(startId)
+            return START_NOT_STICKY
+        }
         if (AccountStore.get(this).current() == null) {
             PayWidgetProvider.refreshAll(this)
             stopSelf(startId)

@@ -1,19 +1,29 @@
 package com.tika.gsaulife
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.view.View
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tika.gsaulife.academic.AcademicFeature
 import com.tika.gsaulife.card.CardFeature
+import com.tika.gsaulife.card.LegalAgreementStore
 import com.tika.gsaulife.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -26,8 +36,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        currentTab = savedInstanceState?.getString(STATE_TAB)?.let(Tab::valueOf) ?: Tab.CARD
         applyInsets()
+        if (LegalAgreementStore.isAccepted(this)) {
+            initialize(savedInstanceState)
+        } else {
+            showLegalAgreement(savedInstanceState)
+        }
+    }
+
+    private fun initialize(savedInstanceState: Bundle?) {
+        currentTab = savedInstanceState?.getString(STATE_TAB)?.let(Tab::valueOf) ?: Tab.CARD
         binding.navAcademic.setOnClickListener { select(Tab.ACADEMIC) }
         binding.navCard.setOnClickListener { select(Tab.CARD) }
         binding.navSettings.setOnClickListener { select(Tab.SETTINGS) }
@@ -38,6 +56,50 @@ class MainActivity : AppCompatActivity() {
                 if (currentTab == Tab.CARD) finish() else select(Tab.CARD)
             }
         })
+    }
+
+    private fun showLegalAgreement(savedInstanceState: Bundle?) {
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.first_launch_agreement_title)
+            .setMessage(agreementMessage())
+            .setCancelable(false)
+            .setNegativeButton(R.string.first_launch_agreement_reject) { _, _ ->
+                finishAffinity()
+            }
+            .setPositiveButton(R.string.first_launch_agreement_accept) { _, _ ->
+                LegalAgreementStore.accept(this)
+                CardFeature.refreshWidgets(this)
+                initialize(savedInstanceState)
+            }
+            .create()
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.setOnShowListener {
+            dialog.findViewById<TextView>(android.R.id.message)?.movementMethod =
+                LinkMovementMethod.getInstance()
+        }
+        dialog.show()
+    }
+
+    private fun agreementMessage(): CharSequence = SpannableStringBuilder()
+        .append(getString(R.string.first_launch_agreement_message))
+        .append("\n\n")
+        .appendLink(getString(R.string.privacy_title), PRIVACY_URL)
+        .append("　")
+        .appendLink(getString(R.string.agreement_title), TERMS_URL)
+
+    private fun SpannableStringBuilder.appendLink(label: String, uri: String) = apply {
+        val start = length
+        append(label)
+        setSpan(
+            object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    startActivity(Intent(Intent.ACTION_VIEW, uri.toUri()))
+                }
+            },
+            start,
+            length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -111,5 +173,9 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val STATE_TAB = "selected_tab"
+        private const val PRIVACY_URL =
+            "https://github.com/RE-TikaRa/GSAULife/blob/v1.0.0/docs/legal/Privacy-Policy.md"
+        private const val TERMS_URL =
+            "https://github.com/RE-TikaRa/GSAULife/blob/v1.0.0/docs/legal/Terms-of-Service.md"
     }
 }

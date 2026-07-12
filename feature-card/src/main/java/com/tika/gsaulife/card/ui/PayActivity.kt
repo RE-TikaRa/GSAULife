@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.tika.gsaulife.card.LegalAgreementStore
 import com.tika.gsaulife.card.R
 import com.tika.gsaulife.card.data.Account
 import com.tika.gsaulife.card.data.AccountStore
@@ -21,11 +22,18 @@ import kotlinx.coroutines.launch
 
 class PayActivity : AppCompatActivity() {
     private lateinit var binding: CardActivityPayBinding
+    private var agreementAccepted = false
     private var refreshJob: Job? = null
     private var expiryJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        agreementAccepted = LegalAgreementStore.isAccepted(this)
+        if (!agreementAccepted) {
+            packageManager.getLaunchIntentForPackage(packageName)?.let(::startActivity)
+            finish()
+            return
+        }
         binding = CardActivityPayBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.attributes = window.attributes.apply { screenBrightness = 1f }
@@ -37,15 +45,18 @@ class PayActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (!agreementAccepted) return
         RefreshController.enterPaymentScreen(this)
         showCached()
         startRefreshLoop()
     }
 
     override fun onPause() {
-        refreshJob?.cancel()
-        expiryJob?.cancel()
-        RefreshController.leavePaymentScreen(this)
+        if (agreementAccepted) {
+            refreshJob?.cancel()
+            expiryJob?.cancel()
+            RefreshController.leavePaymentScreen(this)
+        }
         super.onPause()
     }
 

@@ -8,6 +8,7 @@ import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.content.edit
 import androidx.core.net.toUri
+import com.tika.gsaulife.card.LegalAgreementStore
 import com.tika.gsaulife.card.RefreshMode
 import com.tika.gsaulife.card.data.AccountStore
 import com.tika.gsaulife.card.widget.PayWidgetProvider
@@ -35,6 +36,11 @@ internal object RefreshController {
     }
 
     fun restore(context: Context) {
+        if (!LegalAgreementStore.isAccepted(context)) {
+            stop(context)
+            PayWidgetProvider.refreshAll(context)
+            return
+        }
         PayWidgetProvider.refreshAll(context)
         if (shouldRunRefreshService(getMode(context), AccountStore.get(context).current() != null)) {
             RefreshService.start(context)
@@ -49,6 +55,10 @@ internal object RefreshController {
 
     fun leavePaymentScreen(context: Context) {
         restore(context)
+    }
+
+    fun stop(context: Context) {
+        RefreshService.stop(context)
     }
 
     fun isIgnoringBatteryOptimizations(context: Context): Boolean {
