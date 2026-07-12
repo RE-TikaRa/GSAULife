@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="gsau_primary">#A5C4B5</color>
+    <color name="gsau_on_primary">#12372A</color>
+    <color name="gsau_primary_container">#4F6B5F</color>
+    <color name="gsau_on_primary_container">#D3E5DC</color>
+    <color name="gsau_secondary">#B6CCBF</color>
+    <color name="gsau_on_secondary">#22352C</color>
+    <color name="gsau_secondary_container">#384C42</color>
+    <color name="gsau_on_secondary_container">#D2E4DA</color>
+    <color name="gsau_tertiary">#8FA99C</color>
+    <color name="gsau_on_tertiary">#10261D</color>
+    <color name="gsau_background">#101613</color>
+    <color name="gsau_on_background">#DEE4E0</color>
+    <color name="gsau_surface">#151C18</color>
+    <color name="gsau_on_surface">#DEE4E0</color>
+    <color name="gsau_surface_variant">#404944</color>
+    <color name="gsau_on_surface_variant">#BFC9C3</color>
+    <color name="gsau_surface_dim">#101613</color>
+    <color name="gsau_surface_bright">#363D39</color>
+    <color name="gsau_surface_container_lowest">#0B100D</color>
+    <color name="gsau_surface_container_low">#151C18</color>
+    <color name="gsau_surface_container">#1B231E</color>
+    <color name="gsau_surface_container_high">#252D28</color>
+    <color name="gsau_surface_container_highest">#303833</color>
+    <color name="gsau_outline">#89938D</color>
+    <color name="gsau_outline_variant">#404944</color>
+    <color name="gsau_error">#FFB4AB</color>
+    <color name="gsau_on_error">#690005</color>
+    <color name="gsau_error_container">#93000A</color>
+    <color name="gsau_on_error_container">#FFDAD6</color>
+    <color name="gsau_launcher_background">#6B8E7F</color>
+</resources>

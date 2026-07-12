@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Base.Theme.GSAULife" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/gsau_primary</item>
+        <item name="colorOnPrimary">@color/gsau_on_primary</item>
+        <item name="colorPrimaryContainer">@color/gsau_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/gsau_on_primary_container</item>
+        <item name="colorSecondary">@color/gsau_secondary</item>
+        <item name="colorOnSecondary">@color/gsau_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/gsau_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/gsau_on_secondary_container</item>
+        <item name="colorTertiary">@color/gsau_tertiary</item>
+        <item name="colorOnTertiary">@color/gsau_on_tertiary</item>
+        <item name="android:colorBackground">@color/gsau_background</item>
+        <item name="colorOnBackground">@color/gsau_on_background</item>
+        <item name="colorSurface">@color/gsau_surface</item>
+        <item name="colorOnSurface">@color/gsau_on_surface</item>
+        <item name="colorSurfaceVariant">@color/gsau_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/gsau_on_surface_variant</item>
+        <item name="colorSurfaceDim">@color/gsau_surface_dim</item>
+        <item name="colorSurfaceBright">@color/gsau_surface_bright</item>
+        <item name="colorSurfaceContainerLowest">@color/gsau_surface_container_lowest</item>
+        <item name="colorSurfaceContainerLow">@color/gsau_surface_container_low</item>
+        <item name="colorSurfaceContainer">@color/gsau_surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/gsau_surface_container_high</item>
+        <item name="colorSurfaceContainerHighest">@color/gsau_surface_container_highest</item>
+        <item name="colorOutline">@color/gsau_outline</item>
+        <item name="colorOutlineVariant">@color/gsau_outline_variant</item>
+        <item name="colorError">@color/gsau_error</item>
+        <item name="colorOnError">@color/gsau_on_error</item>
+        <item name="colorErrorContainer">@color/gsau_error_container</item>
+        <item name="colorOnErrorContainer">@color/gsau_on_error_container</item>
+        <item name="android:windowBackground">@color/gsau_background</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.GSAULife" parent="Base.Theme.GSAULife" />
+</resources>

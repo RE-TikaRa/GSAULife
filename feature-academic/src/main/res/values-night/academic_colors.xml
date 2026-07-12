@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="academic_score_pass">#A5D0B8</color>
+    <color name="academic_score_fail">#FFB4AB</color>
+</resources>

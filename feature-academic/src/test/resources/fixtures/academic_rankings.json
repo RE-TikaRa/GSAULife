@@ -1,0 +1,6 @@
+{"returnCode":"0","description":"成功","data":[
+{"XN":"2024","XN_DISPLAY":"2024-2025学年","XQ":"1","XQ_DISPLAY":"第一学期","CJNJ":"大一上","ZYPM":12,"ZYZRS":120,"BJPM":5,"BJRS":40},
+{"XN":"2024","XN_DISPLAY":"2024-2025学年","XQ":"2","XQ_DISPLAY":"第二学期","CJNJ":"大一下","ZYPM":10,"ZYZRS":120,"BJPM":4,"BJRS":40},
+{"XN":"2025","XN_DISPLAY":"2025-2026学年","XQ":"1","XQ_DISPLAY":"第一学期","CJNJ":"大二上","ZYPM":8,"ZYZRS":118,"BJPM":3,"BJRS":39},
+{"XN":"2025","XN_DISPLAY":"2025-2026学年","XQ":"2","XQ_DISPLAY":"第二学期","CJNJ":"大二下","ZYPM":6,"ZYZRS":118,"BJPM":2,"BJRS":39}
+]}

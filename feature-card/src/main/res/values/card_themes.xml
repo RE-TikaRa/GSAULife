@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.GSAULife.Card.Pay" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/card_primary</item>
+        <item name="colorOnPrimary">@color/card_on_primary</item>
+        <item name="colorSecondary">@color/card_secondary</item>
+        <item name="colorSurface">@color/card_surface</item>
+        <item name="colorOnSurface">@color/card_text</item>
+        <item name="colorOnSurfaceVariant">@color/card_text_hint</item>
+        <item name="colorOutline">@color/card_outline</item>
+        <item name="android:windowBackground">@color/card_screen_bg</item>
+        <item name="android:colorBackground">@color/card_screen_bg</item>
+        <item name="android:navigationBarColor">@color/card_screen_bg</item>
+    </style>
+</resources>

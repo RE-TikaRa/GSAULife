@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="academic_title">教务</string>
+    <string name="academic_feature_grades">成绩查询</string>
+    <string name="academic_feature_schedule">我的课表</string>
+    <string name="academic_feature_exams">考试安排</string>
+    <string name="academic_feature_rankings">学业排名</string>
+
+    <string name="academic_action_refresh">刷新</string>
+    <string name="academic_action_retry">重试</string>
+    <string name="academic_action_login">去登录</string>
+    <string name="academic_action_confirm">确定</string>
+    <string name="academic_action_calibrate_week">校准教学周</string>
+    <string name="academic_state_error">获取失败：%1$s</string>
+    <string name="academic_state_logged_out">登录已失效，请重新登录</string>
+    <string name="academic_cache_offline">显示本机数据 · 更新于 %1$s</string>
+    <string name="academic_cache_logged_out">登录已失效 · 数据更新于 %1$s</string>
+    <string name="academic_cached_at">本机数据 · 更新于 %1$s</string>
+
+    <string name="academic_grades_empty">暂无成绩记录</string>
+    <string name="academic_grades_stat_gpa">平均绩点</string>
+    <string name="academic_grades_stat_average">平均分</string>
+    <string name="academic_grades_stat_credits">总学分</string>
+    <string name="academic_grades_stat_count">门数</string>
+    <string name="academic_grades_term_summary">绩点 %1$s  均分 %2$s  %3$s 学分</string>
+    <string name="academic_credit_suffix">学分</string>
+    <string name="academic_grade_point">绩点%1$.1f</string>
+    <string name="academic_number">%1$d</string>
+    <string name="academic_grades_detail_empty">这门课没有成绩明细</string>
+    <string name="academic_grades_detail_ratio">占 %1$s</string>
+    <string name="academic_grades_detail_total">总成绩</string>
+
+    <string name="academic_exams_empty">暂无考试安排</string>
+    <string name="academic_exam_index">第%1$d场</string>
+
+    <string name="academic_rankings_empty">暂无排名数据</string>
+    <string name="academic_ranking_major">专业  %1$d / %2$d</string>
+    <string name="academic_ranking_class">班级  %1$d / %2$d</string>
+
+    <string name="academic_schedule_empty">本学期暂无课表数据</string>
+    <string name="academic_schedule_week">课表 · 第%1$d周</string>
+    <string name="academic_schedule_calibrate_title">当前是第几教学周？</string>
+    <string name="academic_week_label">第%1$d周</string>
+    <string name="academic_schedule_sections">第 %1$d-%2$d 节</string>
+    <string name="academic_schedule_weeks">%1$s 周</string>
+</resources>

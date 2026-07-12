@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="720dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_title"
+                android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                android:textColor="?attr/colorOnSurface"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/Gsau.Settings.SectionTitle"
+                android:text="@string/settings_identity" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="64dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Gsau.Settings.RowTitle"
+                        android:text="@string/settings_academic_system" />
+
+                    <TextView
+                        android:id="@+id/academicStatus"
+                        style="@style/Gsau.Settings.RowSubtitle"
+                        android:text="@string/settings_logged_out" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/academicLogin"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="@string/settings_login" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorOutlineVariant" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="64dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Gsau.Settings.RowTitle"
+                        android:text="@string/settings_student_affairs" />
+
+                    <TextView
+                        android:id="@+id/studentStatus"
+                        style="@style/Gsau.Settings.RowSubtitle"
+                        android:text="@string/settings_logged_out" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/studentLogin"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="@string/settings_login" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/logoutAcademic"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="end"
+                android:text="@string/settings_logout"
+                android:textColor="?attr/colorError" />
+
+            <TextView
+                style="@style/Gsau.Settings.SectionTitle"
+                android:text="@string/settings_appearance" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/themeGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/themeSystem"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/settings_theme_system" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/themeLight"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/settings_theme_light" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/themeDark"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/settings_theme_dark" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <TextView
+                style="@style/Gsau.Settings.SectionTitle"
+                android:text="@string/settings_card_background" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/refreshGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/refreshOnDemand"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/settings_refresh_on_demand" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/refreshContinuous"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/settings_refresh_continuous" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <LinearLayout
+                android:id="@+id/continuousSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/Gsau.Settings.RowSubtitle"
+                    android:text="@string/settings_continuous_description" />
+
+                <TextView
+                    android:id="@+id/batteryStatus"
+                    style="@style/Gsau.Settings.RowSubtitle"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/settings_battery_active" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/batteryButton"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/settings_battery_action" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/autoStartButton"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/settings_autostart_action" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/Gsau.Settings.SectionTitle"
+                android:text="@string/settings_about" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="56dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/versionText"
+                    style="@style/Gsau.Settings.RowTitle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/settings_version" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/updateButton"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="@string/settings_check_update" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="6dp"
+                android:background="?attr/colorOutlineVariant" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/emailButton"
+                style="@style/Gsau.Settings.LinkButton"
+                android:text="@string/settings_email"
+                app:icon="@drawable/gsau_ic_open" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/githubButton"
+                style="@style/Gsau.Settings.LinkButton"
+                android:text="@string/settings_github"
+                app:icon="@drawable/gsau_ic_open" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bilibiliButton"
+                style="@style/Gsau.Settings.LinkButton"
+                android:text="@string/settings_bilibili"
+                app:icon="@drawable/gsau_ic_open" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/wechatButton"
+                style="@style/Gsau.Settings.LinkButton"
+                android:text="@string/settings_wechat" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="6dp"
+                android:background="?attr/colorOutlineVariant" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/licenseButton"
+                style="@style/Gsau.Settings.LinkButton"
+                android:text="@string/settings_license" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/privacyButton"
+                style="@style/Gsau.Settings.LinkButton"
+                android:text="@string/settings_privacy" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/agreementButton"
+                style="@style/Gsau.Settings.LinkButton"
+                android:text="@string/settings_agreement" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
