@@ -3,9 +3,11 @@ plugins {
 }
 
 val appVersionName = System.getenv("VERSION_NAME") ?: "1.0.0"
-val appVersionCode = appVersionName.split('.').map(String::toInt).let { (major, minor, patch) ->
-    major * 1_000_000 + minor * 1_000 + patch
-}
+val appVersion = requireNotNull(
+    Regex("""(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)""").matchEntire(appVersionName)
+) { "VERSION_NAME must use major.minor.patch" }
+val (major, minor, patch) = appVersion.destructured
+val appVersionCode = major.toInt() * 1_000_000 + minor.toInt() * 1_000 + patch.toInt()
 
 android {
     namespace = "com.tika.gsaulife"
