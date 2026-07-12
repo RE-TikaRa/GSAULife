@@ -36,12 +36,6 @@ class RefreshService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action == ACTION_STOP) {
-            refreshJob?.cancel()
-            stopForeground(STOP_FOREGROUND_REMOVE)
-            stopSelf(startId)
-            return START_NOT_STICKY
-        }
         if (AccountStore.get(this).current() == null) {
             PayWidgetProvider.refreshAll(this)
             stopSelf(startId)
@@ -107,17 +101,14 @@ class RefreshService : Service() {
         private const val TAG = "CardRefreshService"
         private const val CHANNEL_ID = "gsaulife_card_refresh"
         private const val NOTIFICATION_ID = 1101
-        private const val ACTION_STOP = "com.tika.gsaulife.card.STOP_REFRESH"
 
         fun start(context: Context) {
             start(context, Intent(context, RefreshService::class.java))
         }
 
         fun stop(context: Context) {
-            start(
-                context,
-                Intent(context, RefreshService::class.java).setAction(ACTION_STOP),
-            )
+            runCatching { context.stopService(Intent(context, RefreshService::class.java)) }
+                .onFailure { Log.w(TAG, "Unable to stop card refresh service", it) }
         }
 
         private fun start(context: Context, intent: Intent) = runCatching {

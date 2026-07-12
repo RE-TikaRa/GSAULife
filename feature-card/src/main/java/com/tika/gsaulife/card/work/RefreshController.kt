@@ -36,16 +36,15 @@ internal object RefreshController {
 
     fun restore(context: Context) {
         PayWidgetProvider.refreshAll(context)
-        if (
-            getMode(context) == RefreshMode.CONTINUOUS &&
-            AccountStore.get(context).current() != null
-        ) {
+        if (shouldRunRefreshService(getMode(context), AccountStore.get(context).current() != null)) {
             RefreshService.start(context)
+        } else {
+            RefreshService.stop(context)
         }
     }
 
     fun enterPaymentScreen(context: Context) {
-        if (getMode(context) == RefreshMode.CONTINUOUS) RefreshService.stop(context)
+        RefreshService.stop(context)
     }
 
     fun leavePaymentScreen(context: Context) {
@@ -115,3 +114,6 @@ internal object RefreshController {
         runCatching { context.startActivity(details) }
     }
 }
+
+internal fun shouldRunRefreshService(mode: RefreshMode, hasAccount: Boolean): Boolean =
+    mode == RefreshMode.CONTINUOUS && hasAccount
