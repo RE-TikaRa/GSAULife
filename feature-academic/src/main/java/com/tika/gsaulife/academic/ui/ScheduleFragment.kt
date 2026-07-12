@@ -31,6 +31,7 @@ import java.util.TimeZone
 
 private const val DEFAULT_MAX_WEEK = 20
 private const val MAX_CALIBRATION_WEEK = 99
+private const val TERM_START_PICKER_TAG = "academic-term-start"
 
 internal class ScheduleFragment : Fragment(), AcademicPage {
     override val destination = AcademicDestination.SCHEDULE
@@ -193,6 +194,12 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
 
     private fun showTermStartPicker() {
         if (term.isEmpty() || courses.isEmpty()) return
+        if (
+            parentFragmentManager.isStateSaved ||
+            parentFragmentManager.findFragmentByTag(TERM_START_PICKER_TAG) != null
+        ) {
+            return
+        }
         val picker = MaterialDatePicker.Builder.datePicker()
             .setTitleText(R.string.academic_schedule_term_start_title)
             .setSelection(
@@ -204,7 +211,7 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
             settings.setTermStart(term, fromUtcDate(date))
             applyCurrentWeek(settings.currentWeek(term))
         }
-        picker.show(parentFragmentManager, "academic-term-start")
+        picker.show(parentFragmentManager, TERM_START_PICKER_TAG)
     }
 
     private fun showCourseDetail(course: Course) {
