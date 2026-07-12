@@ -10,6 +10,7 @@
     <string name="academic_action_retry">重试</string>
     <string name="academic_action_login">去登录</string>
     <string name="academic_action_confirm">确定</string>
+    <string name="academic_action_set_term_start">设置开学日期</string>
     <string name="academic_action_calibrate_week">校准教学周</string>
     <string name="academic_state_error">获取失败：%1$s</string>
     <string name="academic_state_logged_out">登录已失效，请重新登录</string>
@@ -39,8 +40,9 @@
 
     <string name="academic_schedule_empty">本学期暂无课表数据</string>
     <string name="academic_schedule_week">课表 · 第%1$d周</string>
+    <string name="academic_schedule_term_start_title">选择本学期开学日期</string>
     <string name="academic_schedule_calibrate_title">当前是第几教学周？</string>
-    <string name="academic_week_label">第%1$d周</string>
+    <string name="academic_schedule_calibrate_error">请输入 1–%1$d 之间的数字</string>
     <string name="academic_schedule_sections">第 %1$d-%2$d 节</string>
     <string name="academic_schedule_weeks">%1$s 周</string>
 </resources>

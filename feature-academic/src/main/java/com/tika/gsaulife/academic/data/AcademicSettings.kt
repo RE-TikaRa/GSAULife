@@ -18,10 +18,19 @@ internal class AcademicSettings private constructor(context: Context) {
         preferences.edit { putString(termKey(term), value.toString()) }
     }
 
-    fun currentWeek(term: String, now: Long = System.currentTimeMillis()): Int? {
+    fun setTermStart(term: String, date: Long) {
+        calibrateWeek(term, date, 1)
+    }
+
+    fun termStart(term: String): Long? {
         val raw = preferences.getString(termKey(term), null) ?: return null
         val value = JSONObject(raw)
-        return weekFromCalibration(value.getLong("date"), value.getInt("week"), now)
+        return termStartFromCalibration(value.getLong("date"), value.getInt("week"))
+    }
+
+    fun currentWeek(term: String, now: Long = System.currentTimeMillis()): Int? {
+        val start = termStart(term) ?: return null
+        return weekOf(start, now)
     }
 
     fun clear() {
@@ -46,9 +55,10 @@ internal class AcademicSettings private constructor(context: Context) {
             return (elapsedDays / 7 + 1).toInt()
         }
 
-        fun weekFromCalibration(date: Long, week: Int, day: Long): Int {
-            val elapsedDays = TimeUnit.MILLISECONDS.toDays(atStartOfDay(day) - atStartOfDay(date))
-            return week + Math.floorDiv(elapsedDays, 7).toInt()
+        fun termStartFromCalibration(date: Long, week: Int): Long = Calendar.getInstance().run {
+            timeInMillis = atStartOfDay(date)
+            add(Calendar.DATE, -(week - 1) * 7)
+            timeInMillis
         }
 
         @Volatile

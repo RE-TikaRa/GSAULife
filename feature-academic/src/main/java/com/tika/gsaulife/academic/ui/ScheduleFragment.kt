@@ -1,14 +1,20 @@
 package com.tika.gsaulife.academic.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tika.gsaulife.academic.R
 import com.tika.gsaulife.academic.data.AcademicCache
@@ -19,6 +25,10 @@ import com.tika.gsaulife.academic.databinding.AcademicSheetCourseBinding
 import com.tika.gsaulife.academic.model.Course
 import com.tika.gsaulife.academic.model.SchedulePage
 import kotlinx.coroutines.launch
+import java.util.Calendar
+import java.util.TimeZone
+
+private const val DEFAULT_MAX_WEEK = 20
 
 internal class ScheduleFragment : Fragment(), AcademicPage {
     override val destination = AcademicDestination.SCHEDULE
@@ -32,7 +42,7 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
     private var term = ""
     private var courses: List<Course> = emptyList()
     private var selectedWeek = 1
-    private var maxWeek = 20
+    private var maxWeek = DEFAULT_MAX_WEEK
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +59,7 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
         binding.academicToolbar.inflateMenu(R.menu.academic_menu_schedule)
         binding.academicToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
+                R.id.academic_action_set_term_start -> { showTermStartPicker(); true }
                 R.id.academic_action_calibrate_week -> { showWeekCalibration(); true }
                 R.id.academic_action_refresh -> { reload(); true }
                 else -> false
@@ -97,17 +108,22 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
             updateTitle()
             return
         }
-        maxWeek = courses.flatMap { it.weeks }.maxOrNull()?.takeIf { it > 0 } ?: 20
-        val calibrated = settings.currentWeek(term)
-        selectedWeek = (calibrated ?: selectedWeek).coerceIn(1, maxWeek)
+        val termStart = settings.termStart(term)
+        val currentWeek = settings.currentWeek(term)
         binding.academicState.hide()
         binding.academicScheduleScroll.visibility = View.VISIBLE
         binding.academicWeekList.visibility = View.VISIBLE
+        applyCurrentWeek(currentWeek)
+        if (termStart == null) binding.root.post(::showTermStartPicker)
+    }
+
+    private fun applyCurrentWeek(currentWeek: Int?) {
+        maxWeek = scheduleMaxWeek(courses.flatMap { it.weeks }, currentWeek)
+        selectedWeek = (currentWeek ?: selectedWeek).coerceIn(1, maxWeek)
         binding.academicWeekList.adapter = WeekAdapter(maxWeek, selectedWeek, ::selectWeek)
         binding.academicWeekList.scrollToPosition(selectedWeek - 1)
         renderWeek()
         updateTitle()
-        if (calibrated == null) binding.root.post(::showWeekCalibration)
     }
 
     private fun selectWeek(week: Int) {
@@ -129,17 +145,60 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
 
     private fun showWeekCalibration() {
         if (term.isEmpty() || courses.isEmpty()) return
-        var week = selectedWeek
-        val labels = Array(maxWeek) { getString(R.string.academic_week_label, it + 1) }
-        MaterialAlertDialogBuilder(requireContext())
+        val input = EditText(requireContext()).apply {
+            inputType = InputType.TYPE_CLASS_NUMBER
+            setText(selectedWeek.toString())
+            selectAll()
+            maxLines = 1
+        }
+        val padding = (20 * resources.displayMetrics.density).toInt()
+        val container = FrameLayout(requireContext()).apply {
+            setPadding(padding, 0, padding, 0)
+            addView(
+                input,
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                ),
+            )
+        }
+        val dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.academic_schedule_calibrate_title)
-            .setSingleChoiceItems(labels, selectedWeek - 1) { _, index -> week = index + 1 }
-            .setPositiveButton(R.string.academic_action_confirm) { _, _ ->
+            .setView(container)
+            .setPositiveButton(R.string.academic_action_confirm, null)
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
+        dialog.setOnShowListener {
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                val week = input.text.toString().toIntOrNull()
+                if (week == null || week !in 1..maxWeek) {
+                    input.error = getString(R.string.academic_schedule_calibrate_error, maxWeek)
+                    return@setOnClickListener
+                }
                 settings.calibrateWeek(term, System.currentTimeMillis(), week)
                 selectWeek(week)
+                dialog.dismiss()
             }
-            .setNegativeButton(android.R.string.cancel, null)
-            .show()
+            input.requestFocus()
+            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        }
+        dialog.show()
+    }
+
+    private fun showTermStartPicker() {
+        if (term.isEmpty() || courses.isEmpty()) return
+        val picker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText(R.string.academic_schedule_term_start_title)
+            .setSelection(
+                settings.termStart(term)?.let(::toUtcDate)
+                    ?: MaterialDatePicker.todayInUtcMilliseconds()
+            )
+            .build()
+        picker.addOnPositiveButtonClickListener { date ->
+            settings.setTermStart(term, date)
+            applyCurrentWeek(settings.currentWeek(term))
+        }
+        picker.show(parentFragmentManager, "academic-term-start")
     }
 
     private fun showCourseDetail(course: Course) {
@@ -208,5 +267,21 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+}
+
+internal fun scheduleMaxWeek(courseWeeks: Iterable<Int>, currentWeek: Int?): Int =
+    maxOf(DEFAULT_MAX_WEEK, courseWeeks.maxOrNull() ?: 0, currentWeek ?: 0)
+
+private fun toUtcDate(millis: Long): Long {
+    val local = Calendar.getInstance().apply { timeInMillis = millis }
+    return Calendar.getInstance(TimeZone.getTimeZone("UTC")).run {
+        clear()
+        set(
+            local.get(Calendar.YEAR),
+            local.get(Calendar.MONTH),
+            local.get(Calendar.DAY_OF_MONTH),
+        )
+        timeInMillis
     }
 }

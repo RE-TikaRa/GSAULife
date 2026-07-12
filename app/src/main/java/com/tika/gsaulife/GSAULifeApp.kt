@@ -13,7 +13,7 @@ class GSAULifeApp : Application(), DefaultLifecycleObserver {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     }
 
-    override fun onStart(owner: LifecycleOwner) {
+    override fun onStop(owner: LifecycleOwner) {
         CardFeature.restoreContinuousRefresh(this)
     }
 }
