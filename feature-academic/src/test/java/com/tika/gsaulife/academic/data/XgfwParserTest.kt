@@ -43,4 +43,18 @@ class XgfwParserTest {
             )
         }
     }
+
+    @Test
+    fun `排名缺失字段不写入空条目`() {
+        assertThrows(JSONException::class.java) {
+            XgfwParser.rankings("""{"returnCode":"0","data":[{}]}""")
+        }
+    }
+
+    @Test
+    fun `排名数值必须在总人数范围内`() {
+        val json = JSONObject(fixture("academic_rankings.json"))
+        json.getJSONArray("data").getJSONObject(0).put("ZYPM", 121)
+        assertThrows(JSONException::class.java) { XgfwParser.rankings(json.toString()) }
+    }
 }
