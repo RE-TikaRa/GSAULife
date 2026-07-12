@@ -1,0 +1,8 @@
+name = "gh-proxy"
+main = "gh-proxy.js"
+compatibility_date = "2026-07-05"
+workers_dev = false
+
+routes = [
+  { pattern = "gh.re-tikara.fun", custom_domain = true },
+]
