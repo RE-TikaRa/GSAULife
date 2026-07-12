@@ -98,11 +98,10 @@ internal class GradeAdapter(
             }
         }
         academicGradeScore.text = grade.score
-        val passed = grade.numericScore?.let { it >= 60 } ?: true
         academicGradeScore.setTextColor(
             ContextCompat.getColor(
                 root.context,
-                if (passed) R.color.academic_score_pass else R.color.academic_score_fail,
+                if (grade.passed) R.color.academic_score_pass else R.color.academic_score_fail,
             )
         )
         root.isClickable = grade.hasDetail

@@ -17,6 +17,12 @@ data class Grade(
 ) {
     val numericScore: Double? get() = score.toDoubleOrNull()
     val hasDetail: Boolean get() = classId.isNotEmpty()
+    val passed: Boolean
+        get() {
+            numericScore?.let { return it >= 60 }
+            gradePoint?.let { return it > 0 }
+            return score !in FAILED_SCORES
+        }
 
     fun toJson(): JSONObject = JSONObject().apply {
         put("term", term)
@@ -32,6 +38,8 @@ data class Grade(
     }
 
     companion object {
+        private val FAILED_SCORES = setOf("不及格", "不合格", "未通过", "缺考", "作弊")
+
         fun fromJson(json: JSONObject): Grade = Grade(
             term = json.getString("term"),
             courseName = json.getString("courseName"),
