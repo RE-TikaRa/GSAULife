@@ -16,6 +16,8 @@
     <string name="card_link_missing">链接中没有找到 openid</string>
     <string name="card_link_invalid">该链接无法获取付款码，请重新复制</string>
     <string name="card_already_bound">该校园卡已经绑定</string>
+    <string name="card_verifying">正在验证…</string>
+    <string name="card_action_failed">操作失败，请重试</string>
     <string name="card_verify_failed">验证失败：%1$s</string>
     <string name="card_added">已添加 %1$s</string>
     <string name="card_rebind">重新绑定</string>

@@ -226,36 +226,36 @@ class CardFragment : Fragment() {
     private fun showAddDialog() {
         CardDialogs.input(
             context = requireContext(),
+            scope = viewLifecycleOwner.lifecycleScope,
             title = getString(R.string.card_add_title),
             message = getString(R.string.card_add_message),
             hint = getString(R.string.card_link_hint),
             positiveText = getString(R.string.card_add),
+            progressText = getString(R.string.card_verifying),
             onPositive = ::addFromLink
         )
     }
 
-    private fun addFromLink(link: String) {
+    private suspend fun addFromLink(link: String): CharSequence? {
         val parsed = LinkParser.parse(link)
         if (parsed == null) {
-            notice(R.string.card_link_missing)
-            return
+            return getString(R.string.card_link_missing)
         }
         val account = Account(parsed.openid, parsed.cardId)
-        viewLifecycleOwner.lifecycleScope.launch {
-            when (val result = PayCodeManager.refresh(requireContext(), account)) {
-                is PayCodeRepository.Result.Ok -> {
-                    store.add(account)
-                    val index = store.list().indexOfFirst { it.sameCard(account) }
-                    if (index >= 0) store.setCurrentIndex(index)
-                    renderCurrent()
-                    adapter.submit(store.list(), store.currentIndex())
-                    PayWidgetProvider.refreshAll(requireContext())
-                    CardDialogs.notice(binding.root, getString(R.string.card_added, account.displayName()))
-                }
-                PayCodeRepository.Result.Invalid -> notice(R.string.card_link_invalid)
-                is PayCodeRepository.Result.Error ->
-                    CardDialogs.notice(binding.root, getString(R.string.card_verify_failed, result.message))
+        return when (val result = PayCodeManager.refresh(requireContext(), account)) {
+            is PayCodeRepository.Result.Ok -> {
+                store.add(account)
+                val index = store.list().indexOfFirst { it.sameCard(account) }
+                if (index >= 0) store.setCurrentIndex(index)
+                renderCurrent()
+                adapter.submit(store.list(), store.currentIndex())
+                PayWidgetProvider.refreshAll(requireContext())
+                CardDialogs.notice(binding.root, getString(R.string.card_added, account.displayName()))
+                null
             }
+            PayCodeRepository.Result.Invalid -> getString(R.string.card_link_invalid)
+            is PayCodeRepository.Result.Error ->
+                getString(R.string.card_verify_failed, result.message)
         }
     }
 
@@ -264,38 +264,41 @@ class CardFragment : Fragment() {
         if (index < 0) return
         CardDialogs.input(
             context = requireContext(),
+            scope = viewLifecycleOwner.lifecycleScope,
             title = getString(R.string.card_rebind_title, account.displayName()),
             message = getString(R.string.card_rebind_message),
             hint = getString(R.string.card_link_hint),
             positiveText = getString(R.string.card_rebind),
+            progressText = getString(R.string.card_verifying),
             onPositive = { rebind(index, account, it) }
         )
     }
 
-    private fun rebind(index: Int, original: Account, link: String) {
+    private suspend fun rebind(index: Int, original: Account, link: String): CharSequence? {
         val parsed = LinkParser.parse(link)
         if (parsed == null) {
-            notice(R.string.card_link_missing)
-            return
+            return getString(R.string.card_link_missing)
         }
         val account = Account(parsed.openid, parsed.cardId, alias = original.alias)
-        viewLifecycleOwner.lifecycleScope.launch {
-            when (val result = PayCodeManager.refresh(requireContext(), account)) {
-                is PayCodeRepository.Result.Ok -> {
-                    if (!store.replaceAt(index, original, account)) {
-                        notice(R.string.card_already_bound)
-                        return@launch
-                    }
+        return when (val result = PayCodeManager.refresh(requireContext(), account)) {
+            is PayCodeRepository.Result.Ok -> {
+                if (store.replaceAt(index, original, account)) {
                     store.setCurrentIndex(index)
                     renderCurrent()
                     adapter.submit(store.list(), store.currentIndex())
                     PayWidgetProvider.refreshAll(requireContext())
-                    CardDialogs.notice(binding.root, getString(R.string.card_rebound, account.displayName()))
+                    CardDialogs.notice(
+                        binding.root,
+                        getString(R.string.card_rebound, account.displayName())
+                    )
+                    null
+                } else {
+                    getString(R.string.card_already_bound)
                 }
-                PayCodeRepository.Result.Invalid -> notice(R.string.card_link_invalid)
-                is PayCodeRepository.Result.Error ->
-                    CardDialogs.notice(binding.root, getString(R.string.card_verify_failed, result.message))
             }
+            PayCodeRepository.Result.Invalid -> getString(R.string.card_link_invalid)
+            is PayCodeRepository.Result.Error ->
+                getString(R.string.card_verify_failed, result.message)
         }
     }
 
@@ -303,6 +306,7 @@ class CardFragment : Fragment() {
         val account = store.list().getOrNull(index) ?: return
         CardDialogs.input(
             context = requireContext(),
+            scope = viewLifecycleOwner.lifecycleScope,
             title = getString(R.string.card_rename_title),
             message = getString(R.string.card_rename_message),
             hint = getString(R.string.card_alias_hint),
@@ -313,6 +317,7 @@ class CardFragment : Fragment() {
                 renderCurrent()
                 adapter.submit(store.list(), store.currentIndex())
                 PayWidgetProvider.refreshAll(requireContext())
+                null
             }
         )
     }
@@ -332,9 +337,5 @@ class CardFragment : Fragment() {
                 PayWidgetProvider.refreshAll(requireContext())
             }
         )
-    }
-
-    private fun notice(message: Int) {
-        _binding?.let { CardDialogs.notice(it.root, getString(message)) }
     }
 }
