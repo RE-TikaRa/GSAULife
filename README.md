@@ -1,6 +1,6 @@
-<div align="center">
-
-<img src="docs/app-icon.svg" width="128" height="128" alt="甘农生活" />
+<p align="center">
+  <img src="docs/app-icon.svg" width="128" height="128" alt="甘农生活" />
+</p>
 
 # 甘农生活
 
@@ -11,15 +11,11 @@
 > [!IMPORTANT]
 > 本软件目前仅支持 Android，最低需要 Android 7.0（API 24）。校园卡、教务系统与学工系统均依赖甘肃农业大学现有服务，学校页面调整或服务维护期间，部分功能可能暂时不可用。
 
-<br />
-
 [![Platform](https://img.shields.io/badge/platform-Android-3DDC84?logo=android&logoColor=white)](https://developer.android.com)
 [![minSdk](https://img.shields.io/badge/minSdk-24-6B8E7F)](https://apilevels.com)
 [![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/RE-TikaRa/GSAULife?color=6B8E7F)](https://github.com/RE-TikaRa/GSAULife/releases)
-
-</div>
 
 ---
 
