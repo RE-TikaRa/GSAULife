@@ -104,13 +104,25 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
         binding.wechatButton.setOnClickListener { copyWechat() }
         binding.licenseButton.setOnClickListener {
-            showText(R.string.license_title, R.string.license_content)
+            showLegalDocument(
+                R.string.license_title,
+                R.string.license_content,
+                R.string.legal_open_source_url,
+            )
         }
         binding.privacyButton.setOnClickListener {
-            showText(R.string.privacy_title, R.string.privacy_content)
+            showLegalDocument(
+                R.string.privacy_title,
+                R.string.privacy_content,
+                R.string.legal_privacy_url,
+            )
         }
         binding.agreementButton.setOnClickListener {
-            showText(R.string.agreement_title, R.string.agreement_content)
+            showLegalDocument(
+                R.string.agreement_title,
+                R.string.agreement_content,
+                R.string.legal_terms_url,
+            )
         }
     }
 
@@ -248,11 +260,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         Snackbar.make(binding.root, R.string.settings_wechat_copied, Snackbar.LENGTH_SHORT).show()
     }
 
-    private fun showText(title: Int, message: Int) {
+    private fun showLegalDocument(title: Int, message: Int, uri: Int) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton(R.string.settings_close, null)
+            .setNegativeButton(R.string.settings_close, null)
+            .setPositiveButton(R.string.settings_view_full_document) { _, _ ->
+                openUri(getString(uri))
+            }
             .show()
     }
 

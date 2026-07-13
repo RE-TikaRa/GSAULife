@@ -57,11 +57,15 @@
     <string name="settings_privacy">隐私政策</string>
     <string name="settings_agreement">服务协议</string>
     <string name="settings_close">关闭</string>
+    <string name="settings_view_full_document">查看完整文档</string>
 
     <string name="license_title">Apache License 2.0</string>
-    <string name="license_content">甘农生活依据 Apache License 2.0 开源，第三方组件适用各自的许可证。使用、修改或分发项目时，应保留适用的许可证、版权和归属声明，并标明修改内容。\n\n完整说明：https://github.com/RE-TikaRa/GSAULife/blob/v1.0.0/docs/legal/Open-Source.md</string>
+    <string name="license_content">甘农生活依据 Apache License 2.0 开源，第三方组件适用各自的许可证。使用、修改或分发项目时，应保留适用的许可证、版权和归属声明，并标明修改内容。</string>
     <string name="privacy_title">隐私政策</string>
-    <string name="privacy_content">校园卡字段、学校会话、教务缓存和应用设置保存在 Android 应用私有存储中。应用仅在用户主动使用相关功能时，将必要数据发送给对应学校系统。校园数据不会发送到开发者控制的服务；手动检查更新会访问 Cloudflare Worker 与 GitHub，但不附带这些数据，并会产生常规网络元数据。\n\n完整政策：https://github.com/RE-TikaRa/GSAULife/blob/v1.0.0/docs/legal/Privacy-Policy.md</string>
+    <string name="privacy_content">校园卡字段、学校会话、教务缓存和应用设置保存在 Android 应用私有存储中。应用仅在用户主动使用相关功能时，将必要数据发送给对应学校系统。校园数据不会发送到开发者控制的服务；手动检查更新会访问 Cloudflare Worker 与 GitHub，但不附带这些数据，并会产生常规网络元数据。</string>
     <string name="agreement_title">服务协议</string>
-    <string name="agreement_content">甘农生活是个人维护的非官方开源校园工具。使用者应使用本人或已经获得授权的校园卡和学校账号，遵守学校规定，不得攻击、批量抓取或绕过学校系统认证。付款前应确认校园卡、商户和金额，重要教务信息应以学校官方记录为准。学校接口、网络或 Android 系统变化可能导致服务中断，软件在适用法律允许的范围内按现状提供。\n\n完整协议：https://github.com/RE-TikaRa/GSAULife/blob/v1.0.0/docs/legal/Terms-of-Service.md</string>
+    <string name="agreement_content">甘农生活是个人维护的非官方开源校园工具。使用者应使用本人或已经获得授权的校园卡和学校账号，遵守学校规定，不得攻击、批量抓取或绕过学校系统认证。付款前应确认校园卡、商户和金额，重要教务信息应以学校官方记录为准。学校接口、网络或 Android 系统变化可能导致服务中断，软件在适用法律允许的范围内按现状提供。</string>
+    <string name="legal_open_source_url" translatable="false">https://github.com/RE-TikaRa/GSAULife/blob/v1.0.0/docs/legal/Open-Source.md</string>
+    <string name="legal_privacy_url" translatable="false">https://github.com/RE-TikaRa/GSAULife/blob/v1.0.0/docs/legal/Privacy-Policy.md</string>
+    <string name="legal_terms_url" translatable="false">https://github.com/RE-TikaRa/GSAULife/blob/v1.0.0/docs/legal/Terms-of-Service.md</string>
 </resources>

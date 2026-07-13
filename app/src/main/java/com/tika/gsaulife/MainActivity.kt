@@ -83,9 +83,9 @@ class MainActivity : AppCompatActivity() {
     private fun agreementMessage(): CharSequence = SpannableStringBuilder()
         .append(getString(R.string.first_launch_agreement_message))
         .append("\n\n")
-        .appendLink(getString(R.string.privacy_title), PRIVACY_URL)
+        .appendLink(getString(R.string.privacy_title), getString(R.string.legal_privacy_url))
         .append("　")
-        .appendLink(getString(R.string.agreement_title), TERMS_URL)
+        .appendLink(getString(R.string.agreement_title), getString(R.string.legal_terms_url))
 
     private fun SpannableStringBuilder.appendLink(label: String, uri: String) = apply {
         val start = length
@@ -173,9 +173,5 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val STATE_TAB = "selected_tab"
-        private const val PRIVACY_URL =
-            "https://github.com/RE-TikaRa/GSAULife/blob/v1.0.0/docs/legal/Privacy-Policy.md"
-        private const val TERMS_URL =
-            "https://github.com/RE-TikaRa/GSAULife/blob/v1.0.0/docs/legal/Terms-of-Service.md"
     }
 }
