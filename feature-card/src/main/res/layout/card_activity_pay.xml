@@ -81,14 +81,13 @@
                     android:scaleType="fitCenter"
                     android:visibility="gone" />
 
-                <ProgressBar
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/card_pay_qr_progress"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:importantForAccessibility="no"
-                    android:indeterminateTint="?attr/colorPrimary"
+                    android:indeterminate="true"
                     android:visibility="gone" />
 
                 <ImageView
