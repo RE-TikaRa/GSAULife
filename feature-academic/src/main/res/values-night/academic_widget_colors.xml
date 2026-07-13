@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="academic_widget_surface">#1A1C1A</color>
+    <color name="academic_widget_outline">#3A423C</color>
+    <color name="academic_widget_accent">#A6D4BC</color>
+    <color name="academic_widget_on_surface">#E2E3DE</color>
+    <color name="academic_widget_on_surface_variant">#A7B0A6</color>
+    <color name="academic_widget_row_surface">#242824</color>
+</resources>

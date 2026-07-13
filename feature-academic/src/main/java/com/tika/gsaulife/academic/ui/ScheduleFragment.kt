@@ -11,20 +11,27 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.view.ViewCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
+import com.tika.gsaulife.academic.AcademicFeature
 import com.tika.gsaulife.academic.R
 import com.tika.gsaulife.academic.data.AcademicCache
 import com.tika.gsaulife.academic.data.AcademicResult
 import com.tika.gsaulife.academic.data.AcademicSettings
 import com.tika.gsaulife.academic.databinding.AcademicFragmentScheduleBinding
+import com.tika.gsaulife.academic.databinding.AcademicItemSectionTimeBinding
 import com.tika.gsaulife.academic.databinding.AcademicSheetCourseBinding
+import com.tika.gsaulife.academic.databinding.AcademicSheetSectionTimesBinding
 import com.tika.gsaulife.academic.model.Course
 import com.tika.gsaulife.academic.model.SchedulePage
+import com.tika.gsaulife.academic.model.SectionTime
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -32,7 +39,9 @@ import java.util.TimeZone
 
 private const val DEFAULT_MAX_WEEK = 20
 private const val MAX_CALIBRATION_WEEK = 99
+private const val DEFAULT_SECTION_BREAK = 10
 private const val TERM_START_PICKER_TAG = "academic-term-start"
+private const val SECTION_TIME_PICKER_TAG = "academic-section-time"
 
 internal class ScheduleFragment : Fragment(), AcademicPage {
     override val destination = AcademicDestination.SCHEDULE
@@ -66,6 +75,7 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
             when (it.itemId) {
                 R.id.academic_action_set_term_start -> { showTermStartPicker(); true }
                 R.id.academic_action_calibrate_week -> { showWeekCalibration(); true }
+                R.id.academic_action_section_times -> { showSectionTimes(); true }
                 R.id.academic_action_refresh -> { reload(); true }
                 else -> false
             }
@@ -119,6 +129,7 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
         binding.academicScheduleScroll.visibility = View.VISIBLE
         binding.academicWeekList.visibility = View.VISIBLE
         applyCurrentWeek(currentWeek)
+        AcademicFeature.refreshWidgets(requireContext())
         if (termStart == null) binding.root.post(::showTermStartPicker)
     }
 
@@ -213,6 +224,84 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
             applyCurrentWeek(settings.currentWeek(term))
         }
         picker.show(parentFragmentManager, TERM_START_PICKER_TAG)
+    }
+
+    private fun showSectionTimes() {
+        val dialog = BottomSheetDialog(requireContext())
+        val sheet = AcademicSheetSectionTimesBinding.inflate(layoutInflater)
+        val working = settings.sectionTimes().toMutableList()
+        var fillStart = working.first().startMinute
+
+        fun renderRows() {
+            sheet.academicSectionRows.removeAllViews()
+            working.forEachIndexed { index, section ->
+                val row = AcademicItemSectionTimeBinding.inflate(
+                    layoutInflater,
+                    sheet.academicSectionRows,
+                    true,
+                )
+                row.academicSectionIndex.text =
+                    getString(R.string.academic_section_index, index + 1)
+                row.academicSectionStart.text = section.formatStart()
+                row.academicSectionStart.setOnClickListener {
+                    pickTime(working[index].startMinute) { minute ->
+                        working[index] = working[index].copy(startMinute = minute)
+                        row.academicSectionStart.text = working[index].formatStart()
+                    }
+                }
+                row.academicSectionDuration.setText(section.durationMinute.toString())
+                row.academicSectionDuration.doAfterTextChanged { text ->
+                    text.toString().toIntOrNull()?.let { minutes ->
+                        working[index] = working[index].copy(durationMinute = minutes)
+                    }
+                }
+            }
+        }
+
+        sheet.academicSectionFirstStart.text =
+            SectionTime(fillStart, 0).formatStart()
+        sheet.academicSectionFirstStart.setOnClickListener {
+            pickTime(fillStart) { minute ->
+                fillStart = minute
+                sheet.academicSectionFirstStart.text = SectionTime(minute, 0).formatStart()
+            }
+        }
+        sheet.academicSectionDuration.setText(working.first().durationMinute.toString())
+        sheet.academicSectionBreak.setText(DEFAULT_SECTION_BREAK.toString())
+        sheet.academicSectionFill.setOnClickListener {
+            val duration = sheet.academicSectionDuration.text.toString().toIntOrNull()
+                ?: return@setOnClickListener
+            val gap = sheet.academicSectionBreak.text.toString().toIntOrNull()
+                ?: return@setOnClickListener
+            working.clear()
+            repeat(SectionTime.COUNT) { index ->
+                working.add(SectionTime(fillStart + index * (duration + gap), duration))
+            }
+            renderRows()
+        }
+        sheet.academicSectionSave.setOnClickListener {
+            settings.setSectionTimes(working)
+            AcademicFeature.refreshWidgets(requireContext())
+            dialog.dismiss()
+        }
+
+        renderRows()
+        dialog.setContentView(sheet.root)
+        dialog.show()
+    }
+
+    private fun pickTime(minute: Int, onPicked: (Int) -> Unit) {
+        if (parentFragmentManager.isStateSaved) return
+        val picker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .setHour(minute / 60)
+            .setMinute(minute % 60)
+            .setTitleText(R.string.academic_section_pick_start)
+            .build()
+        picker.addOnPositiveButtonClickListener {
+            onPicked(picker.hour * 60 + picker.minute)
+        }
+        picker.show(parentFragmentManager, SECTION_TIME_PICKER_TAG)
     }
 
     private fun showCourseDetail(course: Course) {

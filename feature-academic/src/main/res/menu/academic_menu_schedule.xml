@@ -10,6 +10,10 @@
         android:title="@string/academic_action_calibrate_week"
         app:showAsAction="never" />
     <item
+        android:id="@+id/academic_action_section_times"
+        android:title="@string/academic_action_section_times"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/academic_action_refresh"
         android:icon="@drawable/academic_ic_refresh"
         android:title="@string/academic_action_refresh"

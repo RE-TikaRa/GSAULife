@@ -2,6 +2,8 @@ package com.tika.gsaulife.academic.model
 
 import org.json.JSONArray
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 data class Grade(
     val term: String,
@@ -131,12 +133,63 @@ data class SchedulePage(
     val courses: List<Course>,
 )
 
+data class SectionTime(
+    val startMinute: Int,
+    val durationMinute: Int,
+) {
+    val endMinute: Int get() = startMinute + durationMinute
+
+    fun formatStart(): String = formatMinute(startMinute)
+
+    fun formatEnd(): String = formatMinute(endMinute)
+
+    fun toJson(): JSONObject = JSONObject().apply {
+        put("startMinute", startMinute)
+        put("durationMinute", durationMinute)
+    }
+
+    companion object {
+        const val COUNT = 10
+
+        val DEFAULT: List<SectionTime> = listOf(
+            SectionTime(8 * 60, 50),
+            SectionTime(9 * 60, 50),
+            SectionTime(10 * 60 + 20, 50),
+            SectionTime(11 * 60 + 20, 50),
+            SectionTime(14 * 60, 50),
+            SectionTime(15 * 60, 50),
+            SectionTime(16 * 60 + 20, 50),
+            SectionTime(17 * 60 + 20, 50),
+            SectionTime(19 * 60 + 30, 50),
+            SectionTime(20 * 60 + 30, 50),
+        )
+
+        fun fromJson(json: JSONObject): SectionTime = SectionTime(
+            startMinute = json.getInt("startMinute"),
+            durationMinute = json.getInt("durationMinute"),
+        )
+
+        private fun formatMinute(minute: Int): String {
+            val clamped = ((minute % 1440) + 1440) % 1440
+            return "%02d:%02d".format(clamped / 60, clamped % 60)
+        }
+    }
+}
+
 data class Exam(
     val courseName: String,
     val time: String,
     val location: String,
     val seat: String,
 ) {
+    fun endTime(): Long? {
+        val match = TIME_RE.find(time) ?: return null
+        val (date, end) = match.destructured
+        return runCatching {
+            TIME_FORMAT.parse("$date $end")?.time
+        }.getOrNull()
+    }
+
     fun toJson(): JSONObject = JSONObject().apply {
         put("courseName", courseName)
         put("time", time)
@@ -145,6 +198,9 @@ data class Exam(
     }
 
     companion object {
+        private val TIME_RE = Regex("""(\d{4}-\d{2}-\d{2})\s+\d{1,2}:\d{2}\s*[~-]\s*(\d{1,2}:\d{2})""")
+        private val TIME_FORMAT = SimpleDateFormat("yyyy-MM-dd H:mm", Locale.CHINA)
+
         fun fromJson(json: JSONObject): Exam = Exam(
             courseName = json.getString("courseName"),
             time = json.getString("time"),

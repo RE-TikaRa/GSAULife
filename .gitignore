@@ -2,6 +2,7 @@
 .gradle/
 .wrangler/
 .kotlin/
+.omc/
 .omx/
 .idea/
 local.properties

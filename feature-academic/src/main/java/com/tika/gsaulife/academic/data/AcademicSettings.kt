@@ -2,6 +2,10 @@ package com.tika.gsaulife.academic.data
 
 import android.content.Context
 import androidx.core.content.edit
+import com.tika.gsaulife.academic.model.SectionTime
+import com.tika.gsaulife.academic.model.mapObjects
+import com.tika.gsaulife.academic.model.toJsonArray
+import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -33,6 +37,18 @@ internal class AcademicSettings private constructor(context: Context) {
         return weekOfDays(start, localEpochDay(now))
     }
 
+    fun sectionTimes(): List<SectionTime> {
+        val raw = preferences.getString(KEY_SECTION_TIMES, null) ?: return SectionTime.DEFAULT
+        return JSONArray(raw).mapObjects(SectionTime::fromJson)
+    }
+
+    fun hasSectionTimes(): Boolean = preferences.contains(KEY_SECTION_TIMES)
+
+    fun setSectionTimes(times: List<SectionTime>) {
+        val value = times.toJsonArray { it.toJson() }
+        preferences.edit { putString(KEY_SECTION_TIMES, value.toString()) }
+    }
+
     fun clear() {
         preferences.edit { clear() }
     }
@@ -46,6 +62,8 @@ internal class AcademicSettings private constructor(context: Context) {
     }
 
     companion object {
+        private const val KEY_SECTION_TIMES = "section_times"
+
         fun weekOf(start: Long, day: Long): Int? {
             return weekOfDays(localEpochDay(start), localEpochDay(day))
         }

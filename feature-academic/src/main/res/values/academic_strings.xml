@@ -35,6 +35,7 @@
 
     <string name="academic_exams_empty">暂无考试安排</string>
     <string name="academic_exam_index">第%1$d场</string>
+    <string name="academic_exam_ended">已结束</string>
 
     <string name="academic_rankings_empty">暂无排名数据</string>
     <string name="academic_ranking_major">专业  %1$d / %2$d</string>
@@ -51,4 +52,24 @@
     <string name="academic_schedule_week_accessibility">第 %1$d 周</string>
     <string name="academic_schedule_teacher">教师 %1$s</string>
     <string name="academic_schedule_room">教室 %1$s</string>
+
+    <string name="academic_action_section_times">节次时间</string>
+    <string name="academic_section_times_hint">配置每节课的开始时间，桌面课表会按钟点显示。没配置时显示第几节。</string>
+    <string name="academic_section_fill_title">等长快速填充</string>
+    <string name="academic_section_first_start">首节开始</string>
+    <string name="academic_section_duration">每节时长</string>
+    <string name="academic_section_break">课间时长</string>
+    <string name="academic_section_fill">生成</string>
+    <string name="academic_section_index">第%1$d节</string>
+    <string name="academic_section_minute">%1$d 分钟</string>
+    <string name="academic_section_pick_start">选择开始时间</string>
+    <string name="academic_action_save">保存</string>
+
+    <string name="academic_widget_today_title">今日课程</string>
+    <string name="academic_widget_upcoming_title">近日课程</string>
+    <string name="academic_widget_subtitle">%1$s · 第%2$d周</string>
+    <string name="academic_widget_today_free">今天没有课</string>
+    <string name="academic_widget_day_free">没有课</string>
+    <string name="academic_widget_day_today">今天</string>
+    <string name="academic_widget_day_tomorrow">明天</string>
 </resources>

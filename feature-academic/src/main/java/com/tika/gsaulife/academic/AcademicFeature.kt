@@ -9,6 +9,8 @@ import com.tika.gsaulife.academic.data.AcademicSettings
 import com.tika.gsaulife.academic.data.SchoolSessionStore
 import com.tika.gsaulife.academic.ui.AcademicRootFragment
 import com.tika.gsaulife.academic.ui.LoginActivity
+import com.tika.gsaulife.academic.widget.TodayScheduleWidgetProvider
+import com.tika.gsaulife.academic.widget.UpcomingScheduleWidgetProvider
 
 object AcademicFeature {
     fun createFragment(): Fragment = AcademicRootFragment()
@@ -27,6 +29,12 @@ object AcademicFeature {
         AcademicCache.get(context).clear()
         AcademicSettings.get(context).clear()
         CookieManager.getInstance().removeAllCookies { CookieManager.getInstance().flush() }
+        refreshWidgets(context)
+    }
+
+    fun refreshWidgets(context: Context) {
+        TodayScheduleWidgetProvider.refreshAll(context)
+        UpcomingScheduleWidgetProvider.refreshAll(context)
     }
 
     fun resetToMenu(fragment: Fragment) {
