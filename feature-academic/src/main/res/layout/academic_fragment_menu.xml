@@ -37,7 +37,7 @@
                 android:contentDescription="@string/academic_feature_grades"
                 android:focusable="true"
                 android:minHeight="150dp"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="16dp"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
@@ -81,7 +81,7 @@
                 android:contentDescription="@string/academic_feature_schedule"
                 android:focusable="true"
                 android:minHeight="150dp"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="16dp"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
@@ -125,7 +125,7 @@
                 android:contentDescription="@string/academic_feature_exams"
                 android:focusable="true"
                 android:minHeight="150dp"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="16dp"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
@@ -169,7 +169,7 @@
                 android:contentDescription="@string/academic_feature_rankings"
                 android:focusable="true"
                 android:minHeight="150dp"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="16dp"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
