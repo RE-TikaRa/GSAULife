@@ -99,7 +99,7 @@ class PayActivity : AppCompatActivity() {
             binding.cardPayName.setText(R.string.card_no_card)
             binding.cardPayBalance.text = ""
             binding.cardPayQrContainer.visibility = View.GONE
-            binding.cardPayQr.setImageDrawable(null)
+            hideQr(loading = false)
             binding.cardPayHint.setText(R.string.card_pay_no_card)
             binding.cardPayRefresh.visibility = View.GONE
             return
@@ -113,13 +113,12 @@ class PayActivity : AppCompatActivity() {
             getString(R.string.card_balance, account.balance)
         }
         if (account.hasFreshCode()) {
-            binding.cardPayQr.setImageBitmap(
-                QrGenerator.encode(account.cachedCode, QrGenerator.SIZE_FULLSCREEN)
-            )
-            scheduleExpiry(account)
+            showQr(account)
+            binding.cardPayHint.setText(R.string.card_pay_auto_refresh)
         } else {
             expiryJob?.cancel()
-            binding.cardPayQr.setImageDrawable(null)
+            hideQr(loading = true)
+            binding.cardPayHint.setText(R.string.card_pay_refreshing)
         }
     }
 
@@ -127,45 +126,49 @@ class PayActivity : AppCompatActivity() {
         refreshJob?.cancel()
         refreshJob = lifecycleScope.launch {
             while (isActive) {
-                refresh()
+                refresh(manual = false)
                 delay(PayCodePolicy.REFRESH_INTERVAL_MS)
             }
         }
     }
 
     private fun refreshNow() {
-        lifecycleScope.launch { refresh() }
+        lifecycleScope.launch { refresh(manual = true) }
     }
 
-    private suspend fun refresh() {
+    private suspend fun refresh(manual: Boolean) {
         val account = AccountStore.get(this).current() ?: return
-        binding.cardPayHint.setText(R.string.card_pay_refreshing)
+        if (!account.hasFreshCode()) hideQr(loading = true)
+        if (manual || !account.hasFreshCode()) {
+            binding.cardPayHint.setText(R.string.card_pay_refreshing)
+        }
         val result = PayCodeManager.refresh(this, account)
         if (!account.sameCard(AccountStore.get(this).current())) {
             showCached()
-            binding.cardPayHint.setText(R.string.card_pay_auto_refresh)
+            refresh(manual = false)
             return
         }
         when (result) {
             is PayCodeRepository.Result.Ok -> {
-                binding.cardPayQr.setImageBitmap(
-                    QrGenerator.encode(result.code, QrGenerator.SIZE_FULLSCREEN)
-                )
+                showQr(account)
                 binding.cardPayName.text = account.displayName()
                 binding.cardPayBalance.text = if (account.balance.isBlank()) {
                     ""
                 } else {
                     getString(R.string.card_balance, account.balance)
                 }
-                binding.cardPayHint.setText(R.string.card_pay_auto_refresh)
-                scheduleExpiry(account)
+                if (binding.cardPayHint.text != getString(R.string.card_pay_auto_refresh)) {
+                    binding.cardPayHint.setText(R.string.card_pay_auto_refresh)
+                }
             }
             PayCodeRepository.Result.Invalid -> {
                 showCached()
+                if (!account.hasFreshCode()) hideQr(loading = false)
                 binding.cardPayHint.setText(R.string.card_pay_invalid)
             }
             is PayCodeRepository.Result.Error -> {
                 showCached()
+                if (!account.hasFreshCode()) hideQr(loading = false)
                 binding.cardPayHint.text = getString(R.string.card_fetch_failed, result.message)
             }
         }
@@ -179,7 +182,29 @@ class PayActivity : AppCompatActivity() {
             delay(remaining.coerceAtLeast(0L))
             val current = AccountStore.get(this@PayActivity).current() ?: return@launch
             if (!account.sameCard(current)) return@launch
-            if (current.hasFreshCode()) showCached() else binding.cardPayQr.setImageDrawable(null)
+            if (current.hasFreshCode()) {
+                showCached()
+            } else {
+                hideQr(loading = false)
+                binding.cardPayHint.setText(R.string.card_expired)
+            }
         }
+    }
+
+    private fun showQr(account: Account) {
+        binding.cardPayQr.setImageBitmap(
+            QrGenerator.encode(account.cachedCode, QrGenerator.SIZE_FULLSCREEN)
+        )
+        binding.cardPayQr.visibility = View.VISIBLE
+        binding.cardPayQrProgress.visibility = View.GONE
+        binding.cardPayQrError.visibility = View.GONE
+        scheduleExpiry(account)
+    }
+
+    private fun hideQr(loading: Boolean) {
+        binding.cardPayQr.setImageDrawable(null)
+        binding.cardPayQr.visibility = View.GONE
+        binding.cardPayQrProgress.visibility = if (loading) View.VISIBLE else View.GONE
+        binding.cardPayQrError.visibility = if (loading) View.GONE else View.VISIBLE
     }
 }

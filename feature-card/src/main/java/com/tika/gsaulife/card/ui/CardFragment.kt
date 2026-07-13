@@ -96,7 +96,7 @@ class CardFragment : Fragment() {
             expiryJob?.cancel()
             binding.cardName.setText(R.string.card_no_card)
             binding.cardBalance.visibility = View.GONE
-            binding.cardQr.setImageDrawable(null)
+            hideQr(loading = false)
             binding.cardHint.setText(R.string.card_add_hint)
             return
         }
@@ -104,12 +104,11 @@ class CardFragment : Fragment() {
         binding.cardName.text = account.displayName()
         showBalance(account.balance)
         if (account.hasFreshCode()) {
-            binding.cardQr.setImageBitmap(QrGenerator.encode(account.cachedCode, QrGenerator.SIZE_CARD))
+            showQr(account)
             binding.cardHint.setText(R.string.card_open_fullscreen)
-            scheduleExpiry(account)
         } else {
             expiryJob?.cancel()
-            binding.cardQr.setImageDrawable(null)
+            hideQr(loading = true)
             binding.cardHint.setText(R.string.card_loading)
         }
     }
@@ -126,7 +125,7 @@ class CardFragment : Fragment() {
         refreshJob?.cancel()
         refreshJob = viewLifecycleOwner.lifecycleScope.launch {
             while (isActive) {
-                store.current()?.let { refreshAccount(it) }
+                store.current()?.let { refreshAccount(it, manual = false) }
                 delay(PayCodePolicy.REFRESH_INTERVAL_MS)
             }
         }
@@ -134,11 +133,15 @@ class CardFragment : Fragment() {
 
     private fun refreshNow() {
         val account = store.current() ?: return
-        _binding?.cardHint?.setText(R.string.card_loading)
-        viewLifecycleOwner.lifecycleScope.launch { refreshAccount(account) }
+        viewLifecycleOwner.lifecycleScope.launch { refreshAccount(account, manual = true) }
     }
 
-    private suspend fun refreshAccount(account: Account) {
+    private suspend fun refreshAccount(account: Account, manual: Boolean) {
+        if (manual || !account.hasFreshCode()) {
+            if (!account.hasFreshCode()) hideQr(loading = true)
+            clearHintAction()
+            _binding?.cardHint?.setText(R.string.card_loading)
+        }
         val result = PayCodeManager.refresh(requireContext(), account)
         val binding = _binding ?: return
         if (!account.sameCard(store.current())) return
@@ -147,17 +150,19 @@ class CardFragment : Fragment() {
                 clearHintAction()
                 binding.cardName.text = account.displayName()
                 showBalance(account.balance)
-                binding.cardQr.setImageBitmap(QrGenerator.encode(result.code, QrGenerator.SIZE_CARD))
-                binding.cardHint.setText(R.string.card_open_fullscreen)
-                scheduleExpiry(account)
+                showQr(account)
+                if (binding.cardHint.text != getString(R.string.card_open_fullscreen)) {
+                    binding.cardHint.setText(R.string.card_open_fullscreen)
+                }
                 adapter.submit(store.list(), store.currentIndex())
             }
             PayCodeRepository.Result.Invalid -> {
-                if (!account.hasFreshCode()) binding.cardQr.setImageDrawable(null)
+                if (!account.hasFreshCode()) hideQr(loading = false)
                 showInvalidHint(account)
             }
             is PayCodeRepository.Result.Error -> {
-                if (!account.hasFreshCode()) binding.cardQr.setImageDrawable(null)
+                if (!account.hasFreshCode()) hideQr(loading = false)
+                clearHintAction()
                 binding.cardHint.text = getString(R.string.card_fetch_failed, result.message)
             }
         }
@@ -174,10 +179,28 @@ class CardFragment : Fragment() {
             if (current.hasFreshCode()) {
                 renderCurrent()
             } else {
-                _binding?.cardQr?.setImageDrawable(null)
-                _binding?.cardHint?.setText(R.string.card_loading)
+                clearHintAction()
+                hideQr(loading = false)
+                _binding?.cardHint?.setText(R.string.card_expired)
             }
         }
+    }
+
+    private fun showQr(account: Account) {
+        val binding = _binding ?: return
+        binding.cardQr.setImageBitmap(QrGenerator.encode(account.cachedCode, QrGenerator.SIZE_CARD))
+        binding.cardQr.visibility = View.VISIBLE
+        binding.cardQrProgress.visibility = View.GONE
+        binding.cardQrError.visibility = View.GONE
+        scheduleExpiry(account)
+    }
+
+    private fun hideQr(loading: Boolean) {
+        val binding = _binding ?: return
+        binding.cardQr.setImageDrawable(null)
+        binding.cardQr.visibility = View.GONE
+        binding.cardQrProgress.visibility = if (loading) View.VISIBLE else View.GONE
+        binding.cardQrError.visibility = if (loading) View.GONE else View.VISIBLE
     }
 
     private fun clearHintAction() {
