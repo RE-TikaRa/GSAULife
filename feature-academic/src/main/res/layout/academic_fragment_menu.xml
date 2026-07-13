@@ -57,7 +57,7 @@
                         android:layout_height="60dp"
                         android:background="@drawable/academic_bg_icon_circle"
                         android:importantForAccessibility="no"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:src="@drawable/academic_ic_grades"
                         app:tint="?attr/colorOnPrimaryContainer" />
 
@@ -104,7 +104,7 @@
                         android:layout_height="60dp"
                         android:background="@drawable/academic_bg_icon_circle"
                         android:importantForAccessibility="no"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:src="@drawable/academic_ic_schedule"
                         app:tint="?attr/colorOnPrimaryContainer" />
 
@@ -151,7 +151,7 @@
                         android:layout_height="60dp"
                         android:background="@drawable/academic_bg_icon_circle"
                         android:importantForAccessibility="no"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:src="@drawable/academic_ic_exams"
                         app:tint="?attr/colorOnPrimaryContainer" />
 
@@ -198,7 +198,7 @@
                         android:layout_height="60dp"
                         android:background="@drawable/academic_bg_icon_circle"
                         android:importantForAccessibility="no"
-                        android:padding="15dp"
+                        android:padding="16dp"
                         android:src="@drawable/academic_ic_rankings"
                         app:tint="?attr/colorOnPrimaryContainer" />
 
