@@ -120,6 +120,7 @@ class MainActivity : AppCompatActivity() {
         val target = supportFragmentManager.findFragmentByTag(tab.tag) ?: create(tab)
         supportFragmentManager.beginTransaction().apply {
             setReorderingAllowed(true)
+            setCustomAnimations(R.anim.gsau_fade_in, R.anim.gsau_fade_out)
             Tab.entries.forEach { candidate ->
                 supportFragmentManager.findFragmentByTag(candidate.tag)?.let {
                     hide(it)

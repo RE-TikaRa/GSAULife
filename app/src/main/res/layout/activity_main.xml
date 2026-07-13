@@ -40,7 +40,6 @@
             android:clickable="true"
             android:contentDescription="@string/nav_academic"
             android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -78,7 +77,6 @@
             android:clickable="true"
             android:contentDescription="@string/nav_settings"
             android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical">
 
