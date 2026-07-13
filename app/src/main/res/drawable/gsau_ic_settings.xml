@@ -9,5 +9,5 @@
         android:strokeColor="#FF000000"
         android:strokeLineCap="round"
         android:strokeLineJoin="round"
-        android:strokeWidth="1.7" />
+        android:strokeWidth="2" />
 </vector>
