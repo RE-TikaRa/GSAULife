@@ -2,6 +2,7 @@ package com.tika.gsaulife.card.ui
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -97,12 +98,14 @@ class PayActivity : AppCompatActivity() {
             expiryJob?.cancel()
             binding.cardPayName.setText(R.string.card_no_card)
             binding.cardPayBalance.text = ""
+            binding.cardPayQrContainer.visibility = View.GONE
             binding.cardPayQr.setImageDrawable(null)
             binding.cardPayHint.setText(R.string.card_pay_no_card)
-            binding.cardPayRefresh.isEnabled = false
+            binding.cardPayRefresh.visibility = View.GONE
             return
         }
-        binding.cardPayRefresh.isEnabled = true
+        binding.cardPayQrContainer.visibility = View.VISIBLE
+        binding.cardPayRefresh.visibility = View.VISIBLE
         binding.cardPayName.text = account.displayName()
         binding.cardPayBalance.text = if (account.balance.isBlank()) {
             ""

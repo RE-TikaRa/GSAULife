@@ -86,7 +86,11 @@ class CardFragment : Fragment() {
         val binding = _binding ?: return
         clearHintAction()
         val account = store.current()
+        val hasAccounts = store.list().isNotEmpty()
+        binding.cardQrContainer.visibility = if (account == null) View.GONE else View.VISIBLE
         binding.cardAddEmpty.visibility = if (account == null) View.VISIBLE else View.GONE
+        binding.cardListTitle.visibility = if (hasAccounts) View.VISIBLE else View.GONE
+        binding.cardList.visibility = if (hasAccounts) View.VISIBLE else View.GONE
         binding.cardBtnRefresh.isEnabled = account != null
         if (account == null) {
             expiryJob?.cancel()
@@ -195,6 +199,7 @@ class CardFragment : Fragment() {
         store.setCurrentIndex(index)
         renderCurrent()
         adapter.submit(store.list(), store.currentIndex())
+        binding.root.smoothScrollTo(0, 0)
         startRefreshLoop()
         PayWidgetProvider.refreshAll(requireContext())
     }
