@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity() {
         binding.navAcademic.isSelected = tab == Tab.ACADEMIC
         binding.navCard.isSelected = tab == Tab.CARD
         binding.navSettings.isSelected = tab == Tab.SETTINGS
-        binding.navCard.alpha = if (tab == Tab.CARD) 1f else 0.78f
+        binding.navCardIcon.alpha = if (tab == Tab.CARD) 1f else 0.78f
     }
 
     private fun applyInsets() {

@@ -121,6 +121,7 @@
         app:rippleColor="?attr/colorOnPrimary">
 
         <ImageView
+            android:id="@+id/navCardIcon"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="center"
