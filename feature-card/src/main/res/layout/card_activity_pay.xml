@@ -112,18 +112,13 @@
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/card_pay_refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/card_bg_button"
                 android:minHeight="48dp"
-                android:paddingHorizontal="28dp"
-                android:paddingVertical="12dp"
-                android:stateListAnimator="@null"
-                android:text="@string/card_refresh"
-                android:textColor="?attr/colorOnPrimary" />
+                android:text="@string/card_refresh" />
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

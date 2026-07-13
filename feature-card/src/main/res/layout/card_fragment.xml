@@ -135,17 +135,13 @@
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="13sp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/card_add_empty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/card_bg_button"
                 android:minHeight="48dp"
-                android:paddingVertical="12dp"
-                android:stateListAnimator="@null"
-                android:text="@string/card_add"
-                android:textColor="?attr/colorOnPrimary" />
+                android:text="@string/card_add" />
         </LinearLayout>
 
         <TextView
