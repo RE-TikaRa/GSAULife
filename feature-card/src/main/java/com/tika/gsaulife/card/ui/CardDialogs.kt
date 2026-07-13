@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.tika.gsaulife.card.R
@@ -37,7 +37,7 @@ internal object CardDialogs {
         val errorView = TextView(context).apply {
             accessibilityLiveRegion = View.ACCESSIBILITY_LIVE_REGION_POLITE
             setPadding(0, (4 * density).toInt(), 0, 0)
-            setTextColor(ContextCompat.getColor(context, R.color.card_danger))
+            setTextColor(MaterialColors.getColor(this, androidx.appcompat.R.attr.colorError))
             textSize = 12f
             visibility = View.GONE
         }

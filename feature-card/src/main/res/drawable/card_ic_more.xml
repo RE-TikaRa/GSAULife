@@ -7,7 +7,7 @@
     <path
         android:fillColor="@android:color/transparent"
         android:pathData="M12,5.5L12.01,5.5M12,12L12.01,12M12,18.5L12.01,18.5"
-        android:strokeColor="@color/card_text"
+        android:strokeColor="?attr/colorOnSurfaceVariant"
         android:strokeLineCap="round"
         android:strokeWidth="3" />
 </vector>

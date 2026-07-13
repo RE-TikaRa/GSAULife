@@ -18,8 +18,7 @@
     <application>
         <activity
             android:name=".ui.PayActivity"
-            android:exported="false"
-            android:theme="@style/Theme.GSAULife.Card.Pay" />
+            android:exported="false" />
 
         <service
             android:name=".work.RefreshService"

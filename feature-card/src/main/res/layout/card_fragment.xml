@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/card_page_title"
-                android:textColor="@color/card_text"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -110,7 +110,7 @@
                     android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:importantForAccessibility="no"
-                    android:indeterminateTint="@color/card_qr_status"
+                    android:indeterminateTint="?attr/colorPrimary"
                     android:visibility="gone" />
 
                 <ImageView
@@ -133,7 +133,7 @@
                 android:gravity="center"
                 android:minHeight="48dp"
                 android:text="@string/card_add_hint"
-                android:textColor="@color/card_text_hint"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="13sp" />
 
             <Button
@@ -146,7 +146,7 @@
                 android:paddingVertical="12dp"
                 android:stateListAnimator="@null"
                 android:text="@string/card_add"
-                android:textColor="@color/card_on_primary" />
+                android:textColor="?attr/colorOnPrimary" />
         </LinearLayout>
 
         <TextView
@@ -156,7 +156,7 @@
             android:layout_marginTop="14dp"
             android:layout_marginBottom="8dp"
             android:text="@string/card_list_title"
-            android:textColor="@color/card_text_hint"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="13sp" />
 
         <androidx.recyclerview.widget.RecyclerView

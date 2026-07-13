@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="card_primary">#4F6B5F</color>
-    <color name="card_secondary">#8FA99C</color>
-    <color name="card_screen_bg">#EDF2EF</color>
-    <color name="card_surface">#FFFFFF</color>
-    <color name="card_surface_variant">#F3F6F4</color>
-    <color name="card_outline">#D5DED9</color>
     <color name="card_name_bar">#4F6B5F</color>
     <color name="card_on_name_bar">#FFFFFF</color>
     <color name="card_qr_surface">#FFFFFF</color>
-    <color name="card_qr_status">#4F6B5F</color>
-    <color name="card_qr_error">#B3261E</color>
-    <color name="card_text">#1D2420</color>
-    <color name="card_text_hint">#66706A</color>
-    <color name="card_on_primary">#FFFFFF</color>
-    <color name="card_danger">#B3261E</color>
+    <color name="card_widget_surface">#FFFFFF</color>
+    <color name="card_widget_hint">#66706A</color>
 </resources>

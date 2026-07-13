@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.color.MaterialColors
 import com.tika.gsaulife.card.R
 import com.tika.gsaulife.card.data.Account
 import com.tika.gsaulife.card.data.AccountStore
@@ -207,13 +207,17 @@ class CardFragment : Fragment() {
         val binding = _binding ?: return
         binding.cardHint.setOnClickListener(null)
         binding.cardHint.isClickable = false
-        binding.cardHint.setTextColor(ContextCompat.getColor(requireContext(), R.color.card_text_hint))
+        binding.cardHint.setTextColor(
+            MaterialColors.getColor(binding.cardHint, com.google.android.material.R.attr.colorOnSurfaceVariant)
+        )
     }
 
     private fun showInvalidHint(account: Account) {
         val binding = _binding ?: return
         binding.cardHint.setText(R.string.card_invalid)
-        binding.cardHint.setTextColor(ContextCompat.getColor(requireContext(), R.color.card_primary))
+        binding.cardHint.setTextColor(
+            MaterialColors.getColor(binding.cardHint, androidx.appcompat.R.attr.colorPrimary)
+        )
         binding.cardHint.isClickable = true
         binding.cardHint.setOnClickListener { showRebindDialog(account) }
     }

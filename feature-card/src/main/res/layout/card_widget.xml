@@ -28,7 +28,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:singleLine="true"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/card_on_name_bar"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 tools:text="校园卡" />
@@ -40,7 +40,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:singleLine="true"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/card_on_name_bar"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:visibility="gone"
@@ -80,7 +80,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:importantForAccessibility="no"
-            android:textColor="#66706A"
+            android:textColor="@color/card_widget_hint"
             android:textSize="13sp"
             android:visibility="gone"
             tools:text="@string/card_widget_open_pay_hint" />
