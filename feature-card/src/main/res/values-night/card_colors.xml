@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="card_primary">#9AB9AB</color>
-    <color name="card_primary_dark">#7A9D8D</color>
     <color name="card_secondary">#789588</color>
     <color name="card_screen_bg">#101512</color>
     <color name="card_surface">#1B211D</color>

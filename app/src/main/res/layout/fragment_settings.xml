@@ -64,7 +64,8 @@
                     android:id="@+id/academicLogin"
                     style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/settings_login" />
             </LinearLayout>
 
@@ -100,7 +101,8 @@
                     android:id="@+id/studentLogin"
                     style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/settings_login" />
             </LinearLayout>
 
@@ -108,8 +110,9 @@
                 android:id="@+id/logoutAcademic"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:minHeight="48dp"
                 android:text="@string/settings_logout"
                 android:textColor="?attr/colorError" />
 
@@ -128,24 +131,27 @@
                     android:id="@+id/themeSystem"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:minHeight="48dp"
                     android:text="@string/settings_theme_system" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/themeLight"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:minHeight="48dp"
                     android:text="@string/settings_theme_light" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/themeDark"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:minHeight="48dp"
                     android:text="@string/settings_theme_dark" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -164,16 +170,18 @@
                     android:id="@+id/refreshOnDemand"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:minHeight="48dp"
                     android:text="@string/settings_refresh_on_demand" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/refreshContinuous"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:minHeight="48dp"
                     android:text="@string/settings_refresh_continuous" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -199,16 +207,20 @@
                     android:id="@+id/batteryButton"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:maxLines="2"
+                    android:minHeight="48dp"
                     android:text="@string/settings_battery_action" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/autoStartButton"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:maxLines="2"
+                    android:minHeight="48dp"
                     android:text="@string/settings_autostart_action" />
             </LinearLayout>
 
@@ -234,7 +246,8 @@
                     android:id="@+id/updateButton"
                     style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/settings_check_update" />
             </LinearLayout>
 

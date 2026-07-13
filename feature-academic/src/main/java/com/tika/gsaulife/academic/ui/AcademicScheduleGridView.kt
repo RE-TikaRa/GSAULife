@@ -103,7 +103,7 @@ class AcademicScheduleGridView @JvmOverloads constructor(
         val (background, foreground) = colorOf(course.name)
         coursePaint.color = background
         courseTextPaint.color = foreground
-        roomTextPaint.color = MaterialColors.compositeARGBWithAlpha(foreground, 178)
+        roomTextPaint.color = foreground
         canvas.drawRoundRect(bounds, 6f * density, 6f * density, coursePaint)
         drawText(canvas, course, bounds)
         hitAreas.add(bounds to course)

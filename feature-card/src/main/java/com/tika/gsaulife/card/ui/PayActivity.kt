@@ -1,8 +1,14 @@
 package com.tika.gsaulife.card.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import com.tika.gsaulife.card.LegalAgreementStore
 import com.tika.gsaulife.card.R
@@ -27,6 +33,7 @@ class PayActivity : AppCompatActivity() {
     private var expiryJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         agreementAccepted = LegalAgreementStore.isAccepted(this)
         if (!agreementAccepted) {
@@ -36,11 +43,35 @@ class PayActivity : AppCompatActivity() {
         }
         binding = CardActivityPayBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyInsets()
         window.attributes = window.attributes.apply { screenBrightness = 1f }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding.cardPayBack.setOnClickListener { finish() }
         binding.cardPayQr.setOnClickListener { refreshNow() }
         binding.cardPayRefresh.setOnClickListener { refreshNow() }
+    }
+
+    private fun applyInsets() {
+        val initialLeft = binding.root.paddingLeft
+        val initialTop = binding.root.paddingTop
+        val initialRight = binding.root.paddingRight
+        val initialBottom = binding.root.paddingBottom
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(
+                left = initialLeft + bars.left,
+                top = initialTop + bars.top,
+                right = initialRight + bars.right,
+                bottom = initialBottom + bars.bottom,
+            )
+            val night = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
+                Configuration.UI_MODE_NIGHT_YES
+            WindowInsetsControllerCompat(window, view).apply {
+                isAppearanceLightStatusBars = !night
+                isAppearanceLightNavigationBars = !night
+            }
+            insets
+        }
     }
 
     override fun onResume() {

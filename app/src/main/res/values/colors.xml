@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="gsau_primary">#6B8E7F</color>
+    <color name="gsau_primary">#4F6B5F</color>
     <color name="gsau_on_primary">#FFFFFF</color>
-    <color name="gsau_primary_container">#D3E5DC</color>
+    <color name="gsau_primary_container">#C5D9CE</color>
     <color name="gsau_on_primary_container">#1B352B</color>
-    <color name="gsau_secondary">#4F6B5F</color>
+    <color name="gsau_secondary">#56665D</color>
     <color name="gsau_on_secondary">#FFFFFF</color>
-    <color name="gsau_secondary_container">#D2E4DA</color>
-    <color name="gsau_on_secondary_container">#0C1F17</color>
-    <color name="gsau_tertiary">#8FA99C</color>
-    <color name="gsau_on_tertiary">#10261D</color>
+    <color name="gsau_secondary_container">#A6B7AA</color>
+    <color name="gsau_on_secondary_container">#15231B</color>
+    <color name="gsau_tertiary">#526B73</color>
+    <color name="gsau_on_tertiary">#FFFFFF</color>
+    <color name="gsau_tertiary_container">#D2E4E8</color>
+    <color name="gsau_on_tertiary_container">#0C2026</color>
     <color name="gsau_background">#EAF0ED</color>
     <color name="gsau_on_background">#191C1A</color>
     <color name="gsau_surface">#F8FAF8</color>
