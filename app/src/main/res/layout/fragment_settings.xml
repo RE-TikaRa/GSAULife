@@ -37,74 +37,86 @@
                 style="@style/Gsau.Settings.SectionTitle"
                 android:text="@string/settings_identity" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:minHeight="64dp"
-                android:orientation="horizontal">
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Gsau.Settings.GroupCard">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="4dp">
 
-                    <TextView
-                        style="@style/Gsau.Settings.RowTitle"
-                        android:text="@string/settings_academic_system" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:minHeight="64dp"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/academicStatus"
-                        style="@style/Gsau.Settings.RowSubtitle"
-                        android:text="@string/settings_logged_out" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/Gsau.Settings.RowTitle"
+                                android:text="@string/settings_academic_system" />
+
+                            <TextView
+                                android:id="@+id/academicStatus"
+                                style="@style/Gsau.Settings.RowSubtitle"
+                                android:text="@string/settings_logged_out" />
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/academicLogin"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minHeight="48dp"
+                            android:text="@string/settings_login" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:minHeight="64dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/Gsau.Settings.RowTitle"
+                                android:text="@string/settings_student_affairs" />
+
+                            <TextView
+                                android:id="@+id/studentStatus"
+                                style="@style/Gsau.Settings.RowSubtitle"
+                                android:text="@string/settings_logged_out" />
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/studentLogin"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minHeight="48dp"
+                            android:text="@string/settings_login" />
+                    </LinearLayout>
                 </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/academicLogin"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minHeight="48dp"
-                    android:text="@string/settings_login" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?attr/colorOutlineVariant" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:minHeight="64dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/Gsau.Settings.RowTitle"
-                        android:text="@string/settings_student_affairs" />
-
-                    <TextView
-                        android:id="@+id/studentStatus"
-                        style="@style/Gsau.Settings.RowSubtitle"
-                        android:text="@string/settings_logged_out" />
-                </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/studentLogin"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minHeight="48dp"
-                    android:text="@string/settings_login" />
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/logoutAcademic"
@@ -112,6 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:layout_marginTop="4dp"
                 android:minHeight="48dp"
                 android:text="@string/settings_logout"
                 android:textColor="?attr/colorError" />
@@ -228,78 +241,91 @@
                 style="@style/Gsau.Settings.SectionTitle"
                 android:text="@string/settings_about" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:minHeight="56dp"
-                android:orientation="horizontal">
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Gsau.Settings.GroupCard">
 
-                <TextView
-                    android:id="@+id/versionText"
-                    style="@style/Gsau.Settings.RowTitle"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/settings_version" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/updateButton"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="48dp"
-                    android:text="@string/settings_check_update" />
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:paddingHorizontal="4dp"
+                    android:paddingVertical="4dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="6dp"
-                android:background="?attr/colorOutlineVariant" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:minHeight="56dp"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="12dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/emailButton"
-                style="@style/Gsau.Settings.LinkButton"
-                android:text="@string/settings_email"
-                app:icon="@drawable/gsau_ic_open" />
+                        <TextView
+                            android:id="@+id/versionText"
+                            style="@style/Gsau.Settings.RowTitle"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:text="@string/settings_version" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/githubButton"
-                style="@style/Gsau.Settings.LinkButton"
-                android:text="@string/settings_github"
-                app:icon="@drawable/gsau_ic_open" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/updateButton"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minHeight="48dp"
+                            android:text="@string/settings_check_update" />
+                    </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/bilibiliButton"
-                style="@style/Gsau.Settings.LinkButton"
-                android:text="@string/settings_bilibili"
-                app:icon="@drawable/gsau_ic_open" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="6dp"
+                        android:background="?attr/colorOutlineVariant" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/wechatButton"
-                style="@style/Gsau.Settings.LinkButton"
-                android:text="@string/settings_wechat" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/emailButton"
+                        style="@style/Gsau.Settings.LinkButton"
+                        android:text="@string/settings_email"
+                        app:icon="@drawable/gsau_ic_open" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="6dp"
-                android:background="?attr/colorOutlineVariant" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/githubButton"
+                        style="@style/Gsau.Settings.LinkButton"
+                        android:text="@string/settings_github"
+                        app:icon="@drawable/gsau_ic_open" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/licenseButton"
-                style="@style/Gsau.Settings.LinkButton"
-                android:text="@string/settings_license" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/bilibiliButton"
+                        style="@style/Gsau.Settings.LinkButton"
+                        android:text="@string/settings_bilibili"
+                        app:icon="@drawable/gsau_ic_open" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/privacyButton"
-                style="@style/Gsau.Settings.LinkButton"
-                android:text="@string/settings_privacy" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/wechatButton"
+                        style="@style/Gsau.Settings.LinkButton"
+                        android:text="@string/settings_wechat" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/agreementButton"
-                style="@style/Gsau.Settings.LinkButton"
-                android:text="@string/settings_agreement" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="6dp"
+                        android:background="?attr/colorOutlineVariant" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/licenseButton"
+                        style="@style/Gsau.Settings.LinkButton"
+                        android:text="@string/settings_license" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/privacyButton"
+                        style="@style/Gsau.Settings.LinkButton"
+                        android:text="@string/settings_privacy" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/agreementButton"
+                        style="@style/Gsau.Settings.LinkButton"
+                        android:text="@string/settings_agreement" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
