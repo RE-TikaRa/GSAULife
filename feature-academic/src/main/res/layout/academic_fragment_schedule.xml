@@ -31,10 +31,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">
-            <com.tika.gsaulife.academic.ui.AcademicScheduleGridView
-                android:id="@+id/academic_schedule_grid"
+
+            <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fillViewport="true">
+
+                <com.tika.gsaulife.academic.ui.AcademicScheduleGridView
+                    android:id="@+id/academic_schedule_grid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </HorizontalScrollView>
         </ScrollView>
 
         <com.tika.gsaulife.academic.ui.AcademicStateView

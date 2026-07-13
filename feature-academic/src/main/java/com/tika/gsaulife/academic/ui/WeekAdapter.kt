@@ -27,6 +27,10 @@ internal class WeekAdapter(
     override fun onBindViewHolder(holder: Holder, position: Int) = with(holder.binding) {
         val week = position + 1
         academicWeekLabel.text = root.context.getString(R.string.academic_number, week)
+        academicWeekLabel.contentDescription = root.context.getString(
+            R.string.academic_schedule_week_accessibility,
+            week,
+        )
         academicWeekLabel.isSelected = week == selectedWeek
         root.setOnClickListener { onWeekSelected(week) }
     }

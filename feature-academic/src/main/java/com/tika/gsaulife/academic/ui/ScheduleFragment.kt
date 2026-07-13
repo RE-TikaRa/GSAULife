@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -218,20 +219,31 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
         val dialog = BottomSheetDialog(requireContext())
         val sheet = AcademicSheetCourseBinding.inflate(layoutInflater)
         sheet.academicCourseName.text = course.name
-        bindRow(sheet.academicCourseTeacher, course.teacher)
-        bindRow(sheet.academicCourseRoom, course.room)
+        ViewCompat.setAccessibilityHeading(sheet.academicCourseName, true)
+        bindRow(
+            sheet.academicCourseTeacher,
+            course.teacher,
+            getString(R.string.academic_schedule_teacher, course.teacher),
+        )
+        bindRow(
+            sheet.academicCourseRoom,
+            course.room,
+            getString(R.string.academic_schedule_room, course.room),
+        )
         sheet.academicCourseSections.text = getString(
             R.string.academic_schedule_sections,
             course.startSection,
             course.endSection,
         )
-        bindRow(sheet.academicCourseWeeks, weeksLabel(course.weeks))
+        val weeks = weeksLabel(course.weeks)
+        bindRow(sheet.academicCourseWeeks, weeks, weeks)
         dialog.setContentView(sheet.root)
         dialog.show()
     }
 
-    private fun bindRow(view: TextView, value: String) {
+    private fun bindRow(view: TextView, value: String, description: String) {
         view.text = value
+        view.contentDescription = description
         view.visibility = if (value.isEmpty()) View.GONE else View.VISIBLE
     }
 

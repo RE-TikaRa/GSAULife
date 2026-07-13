@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core)
+    implementation(libs.androidx.customview)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.gridlayout)
     implementation(libs.androidx.lifecycle.runtime)

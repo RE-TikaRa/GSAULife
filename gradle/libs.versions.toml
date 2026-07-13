@@ -5,6 +5,7 @@ browser = "1.10.0"
 constraintlayout = "2.2.1"
 core = "1.19.0"
 coroutines = "1.11.0"
+customview = "1.2.0"
 fragment = "1.8.9"
 gridlayout = "1.1.0"
 json = "20260522"
@@ -24,6 +25,7 @@ androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "a
 androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "core" }
+androidx-customview = { module = "androidx.customview:customview", version.ref = "customview" }
 androidx-fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 androidx-gridlayout = { module = "androidx.gridlayout:gridlayout", version.ref = "gridlayout" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
