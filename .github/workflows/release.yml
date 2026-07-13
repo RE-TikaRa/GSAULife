@@ -73,7 +73,8 @@ jobs:
           BUILD_TOOLS="$(find "$ANDROID_SDK_ROOT/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
           APK=app/build/outputs/apk/release/app-release.apk
           "$BUILD_TOOLS/apksigner" verify --verbose --print-certs "$APK" | tee "$RUNNER_TEMP/signature.txt"
-          grep -qx 'Signer #1 certificate SHA-256 digest: 3152994da0d1c7fb1e6129f23446cdc7baaf03fdea9160899a5dcc59f33446d9' "$RUNNER_TEMP/signature.txt"
+          grep -qx 'Number of signers: 1' "$RUNNER_TEMP/signature.txt"
+          grep -q 'certificate SHA-256 digest: 3152994da0d1c7fb1e6129f23446cdc7baaf03fdea9160899a5dcc59f33446d9$' "$RUNNER_TEMP/signature.txt"
 
       - name: Prepare artifact
         run: |
