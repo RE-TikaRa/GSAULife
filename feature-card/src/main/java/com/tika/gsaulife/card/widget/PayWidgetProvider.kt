@@ -13,15 +13,12 @@ import com.tika.gsaulife.card.R
 import com.tika.gsaulife.card.LegalAgreementStore
 import com.tika.gsaulife.card.RefreshMode
 import com.tika.gsaulife.card.data.AccountStore
-import com.tika.gsaulife.card.data.PayCodeManager
 import com.tika.gsaulife.card.data.PayCodePolicy
 import com.tika.gsaulife.card.qr.QrGenerator
 import com.tika.gsaulife.card.ui.PayActivity
 import com.tika.gsaulife.card.work.RefreshController
+import com.tika.gsaulife.card.work.WidgetRefreshWorker
 import com.tika.gsaulife.card.work.WidgetExpiry
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class PayWidgetProvider : AppWidgetProvider() {
     override fun onEnabled(context: Context) {
@@ -59,32 +56,18 @@ class PayWidgetProvider : AppWidgetProvider() {
                 intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)
             )
             ACTION_SWITCH -> {
+                AccountStore.get(context).switchToNext()
+                refreshAll(context)
                 if (RefreshController.getMode(context) == RefreshMode.CONTINUOUS) {
                     RefreshController.restore(context)
                 }
-                AccountStore.get(context).switchToNext()
-                renderAll(context)
-                fetchAndRender(context)
+                WidgetRefreshWorker.enqueue(context)
             }
             ACTION_REFRESH -> {
                 if (RefreshController.getMode(context) == RefreshMode.CONTINUOUS) {
                     RefreshController.restore(context)
                 }
-                fetchAndRender(context)
-            }
-        }
-    }
-
-    private fun fetchAndRender(context: Context) {
-        val pendingResult = goAsync()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                AccountStore.get(context).current()?.let {
-                    PayCodeManager.refresh(context, it)
-                }
-                refreshAll(context)
-            } finally {
-                pendingResult.finish()
+                WidgetRefreshWorker.enqueue(context)
             }
         }
     }
@@ -104,6 +87,12 @@ class PayWidgetProvider : AppWidgetProvider() {
         val views = RemoteViews(context.packageName, R.layout.card_widget)
         if (!LegalAgreementStore.isAccepted(context)) {
             views.setTextViewText(R.id.card_widget_name, context.getString(R.string.card_widget_add))
+            views.setContentDescription(
+                R.id.card_widget_name,
+                context.getString(R.string.card_widget_add)
+            )
+            views.setViewVisibility(R.id.card_widget_name, View.VISIBLE)
+            views.setViewVisibility(R.id.card_widget_switch, View.GONE)
             views.setViewVisibility(R.id.card_widget_qr, View.GONE)
             views.setViewVisibility(R.id.card_widget_refresh, View.GONE)
             views.setViewVisibility(R.id.card_widget_hint, View.VISIBLE)
@@ -111,9 +100,12 @@ class PayWidgetProvider : AppWidgetProvider() {
                 R.id.card_widget_hint,
                 context.getString(R.string.card_widget_agreement)
             )
+            views.setContentDescription(
+                R.id.card_widget_body,
+                context.getString(R.string.card_widget_agreement)
+            )
             openAppIntent(context)?.let {
-                views.setOnClickPendingIntent(R.id.card_widget_root, it)
-                views.setOnClickPendingIntent(R.id.card_widget_hint, it)
+                views.setOnClickPendingIntent(R.id.card_widget_body, it)
             }
             runCatching { manager.updateAppWidget(widgetId, views) }
                 .onFailure { Log.w(TAG, "Unable to update card widget", it) }
@@ -125,18 +117,51 @@ class PayWidgetProvider : AppWidgetProvider() {
                 R.id.card_widget_name,
                 context.getString(R.string.card_widget_add)
             )
+            views.setContentDescription(
+                R.id.card_widget_name,
+                context.getString(R.string.card_widget_add)
+            )
+            views.setViewVisibility(R.id.card_widget_name, View.VISIBLE)
+            views.setViewVisibility(R.id.card_widget_switch, View.GONE)
             views.setViewVisibility(R.id.card_widget_qr, View.GONE)
+            views.setViewVisibility(R.id.card_widget_refresh, View.GONE)
             views.setViewVisibility(R.id.card_widget_hint, View.VISIBLE)
             views.setTextViewText(
                 R.id.card_widget_hint,
                 context.getString(R.string.card_widget_empty)
             )
+            views.setContentDescription(
+                R.id.card_widget_body,
+                context.getString(R.string.card_widget_open_add)
+            )
             openAppIntent(context)?.let {
-                views.setOnClickPendingIntent(R.id.card_widget_root, it)
-                views.setOnClickPendingIntent(R.id.card_widget_hint, it)
+                views.setOnClickPendingIntent(R.id.card_widget_body, it)
             }
         } else {
-            views.setTextViewText(R.id.card_widget_name, account.displayName())
+            val name = account.displayName()
+            views.setTextViewText(R.id.card_widget_name, name)
+            views.setTextViewText(R.id.card_widget_switch, name)
+            views.setViewVisibility(R.id.card_widget_refresh, View.VISIBLE)
+            if (AccountStore.get(context).list().size > 1) {
+                views.setViewVisibility(R.id.card_widget_name, View.GONE)
+                views.setViewVisibility(R.id.card_widget_switch, View.VISIBLE)
+                views.setContentDescription(
+                    R.id.card_widget_switch,
+                    context.getString(R.string.card_widget_switch_card, name)
+                )
+                views.setOnClickPendingIntent(R.id.card_widget_switch, switchIntent(context))
+            } else {
+                views.setViewVisibility(R.id.card_widget_name, View.VISIBLE)
+                views.setViewVisibility(R.id.card_widget_switch, View.GONE)
+                views.setContentDescription(
+                    R.id.card_widget_name,
+                    context.getString(R.string.card_widget_current_card, name)
+                )
+            }
+            views.setContentDescription(
+                R.id.card_widget_body,
+                context.getString(R.string.card_widget_open_pay, name)
+            )
             if (account.hasFreshCode()) {
                 views.setImageViewBitmap(
                     R.id.card_widget_qr,
@@ -153,12 +178,10 @@ class PayWidgetProvider : AppWidgetProvider() {
                 views.setViewVisibility(R.id.card_widget_hint, View.VISIBLE)
                 views.setTextViewText(
                     R.id.card_widget_hint,
-                    context.getString(R.string.card_widget_refresh_hint)
+                    context.getString(R.string.card_widget_open_pay_hint)
                 )
             }
-            views.setOnClickPendingIntent(R.id.card_widget_name, switchIntent(context))
-            views.setOnClickPendingIntent(R.id.card_widget_qr, openPayIntent(context))
-            views.setOnClickPendingIntent(R.id.card_widget_hint, openPayIntent(context))
+            views.setOnClickPendingIntent(R.id.card_widget_body, openPayIntent(context))
             views.setOnClickPendingIntent(R.id.card_widget_refresh, refreshIntent(context))
         }
         runCatching { manager.updateAppWidget(widgetId, views) }

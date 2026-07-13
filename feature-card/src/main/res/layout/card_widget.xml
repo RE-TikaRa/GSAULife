@@ -10,43 +10,55 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:background="@drawable/card_bg_name_bar"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="6dp"
-        android:paddingVertical="6dp">
+        android:paddingStart="6dp">
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:importantForAccessibility="no" />
-
-        <TextView
-            android:id="@+id/card_widget_name"
+        <FrameLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            tools:text="校园卡" />
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/card_widget_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="校园卡" />
+
+            <TextView
+                android:id="@+id/card_widget_switch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="校园卡" />
+        </FrameLayout>
 
         <ImageView
             android:id="@+id/card_widget_refresh"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="@drawable/card_bg_refresh_circle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:contentDescription="@string/card_cd_refresh"
-            android:padding="7dp"
+            android:padding="12dp"
             android:scaleType="fitCenter"
             android:src="@drawable/card_ic_refresh_light" />
     </LinearLayout>
 
     <FrameLayout
+        android:id="@+id/card_widget_body"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -58,7 +70,7 @@
             android:id="@+id/card_widget_qr"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/card_cd_qr"
+            android:importantForAccessibility="no"
             android:scaleType="fitCenter" />
 
         <TextView
@@ -67,9 +79,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
+            android:importantForAccessibility="no"
             android:textColor="#66706A"
             android:textSize="13sp"
             android:visibility="gone"
-            tools:text="@string/card_widget_refresh_hint" />
+            tools:text="@string/card_widget_open_pay_hint" />
     </FrameLayout>
 </LinearLayout>

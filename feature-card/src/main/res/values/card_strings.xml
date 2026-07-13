@@ -41,7 +41,11 @@
     <string name="card_widget_add">甘农生活</string>
     <string name="card_widget_empty">未添加校园卡</string>
     <string name="card_widget_agreement">打开应用阅读并同意隐私政策</string>
-    <string name="card_widget_refresh_hint">点击刷新付款码</string>
+    <string name="card_widget_open_pay_hint">打开付款页获取付款码</string>
+    <string name="card_widget_current_card">当前校园卡：%1$s</string>
+    <string name="card_widget_switch_card">切换校园卡，当前为 %1$s</string>
+    <string name="card_widget_open_pay">打开 %1$s 的全屏付款码</string>
+    <string name="card_widget_open_add">未添加校园卡，打开甘农生活添加</string>
     <string name="card_notification_channel">校园卡持续刷新</string>
     <string name="card_notification_channel_description">持续获取当前校园卡的付款码</string>
     <string name="card_notification_content">校园卡付款码持续刷新中</string>

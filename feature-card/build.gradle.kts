@@ -40,6 +40,7 @@ dependencies {
     api(libs.androidx.fragment)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.work)
     implementation(libs.coroutines.android)
     implementation(libs.material)
     implementation(libs.okhttp)
