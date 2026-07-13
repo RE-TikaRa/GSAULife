@@ -80,7 +80,11 @@ internal class ExamsFragment : Fragment(), AcademicPage {
         }
         binding.academicState.hide()
         binding.academicList.visibility = View.VISIBLE
-        binding.academicList.adapter = ExamAdapter(page.exams)
+        val now = System.currentTimeMillis()
+        val ordered = page.exams
+            .mapIndexed { index, exam -> index + 1 to exam }
+            .sortedBy { (_, exam) -> (exam.endTime() ?: Long.MAX_VALUE) <= now }
+        binding.academicList.adapter = ExamAdapter(ordered)
     }
 
     private fun showLoading() {

@@ -28,6 +28,18 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
             <TextView
+                android:id="@+id/academic_exam_ended"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/academic_bg_badge_muted"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:text="@string/academic_exam_ended"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="12sp"
+                android:visibility="gone" />
+            <TextView
                 android:id="@+id/academic_exam_index"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
