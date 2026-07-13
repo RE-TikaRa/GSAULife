@@ -35,7 +35,7 @@
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="2dp"
                 android:textColor="?attr/colorOnPrimaryContainer"
-                android:textSize="11sp" />
+                android:textSize="12sp" />
         </LinearLayout>
         <TextView
             android:id="@+id/academic_exam_time"
@@ -45,7 +45,7 @@
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
             android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="13sp"
+            android:textSize="12sp"
             app:drawableStartCompat="@drawable/academic_ic_time"
             app:drawableTint="?attr/colorOnSurfaceVariant" />
         <TextView
@@ -56,7 +56,7 @@
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
             android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="13sp"
+            android:textSize="12sp"
             app:drawableStartCompat="@drawable/academic_ic_location"
             app:drawableTint="?attr/colorOnSurfaceVariant" />
         <TextView
@@ -67,7 +67,7 @@
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
             android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="13sp"
+            android:textSize="12sp"
             app:drawableStartCompat="@drawable/academic_ic_seat"
             app:drawableTint="?attr/colorOnSurfaceVariant" />
     </LinearLayout>

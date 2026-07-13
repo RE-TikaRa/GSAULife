@@ -74,7 +74,7 @@
                     android:gravity="center"
                     android:text="@string/card_no_card"
                     android:textColor="@color/card_on_name_bar"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textColor="@color/card_on_name_bar"
-                    android:textSize="13sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <FrameLayout
@@ -133,7 +133,7 @@
                 android:minHeight="48dp"
                 android:text="@string/card_add_hint"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/card_add_empty"
@@ -152,7 +152,7 @@
             android:layout_marginBottom="8dp"
             android:text="@string/card_list_title"
             android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/card_list"

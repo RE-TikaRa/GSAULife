@@ -42,7 +42,7 @@
             android:layout_marginTop="2dp"
             android:importantForAccessibility="no"
             android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="13sp"
+            android:textSize="12sp"
             tools:text="1073325020407  余额 20.00元" />
     </LinearLayout>
 

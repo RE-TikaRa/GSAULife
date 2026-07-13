@@ -47,7 +47,7 @@
                 android:accessibilityLiveRegion="polite"
                 android:gravity="center"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/academic_state_action"
