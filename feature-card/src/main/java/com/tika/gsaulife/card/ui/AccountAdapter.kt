@@ -3,6 +3,7 @@ package com.tika.gsaulife.card.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,7 @@ import com.tika.gsaulife.card.databinding.CardItemAccountBinding
 
 internal class AccountAdapter(
     private val onClick: (Int) -> Unit,
-    private val onLongClick: (Int) -> Unit
+    private val onMenuClick: (Int) -> Unit
 ) : ListAdapter<AccountAdapter.Item, AccountAdapter.ViewHolder>(ItemCallback) {
     data class Item(val account: Account, val current: Boolean)
 
@@ -41,28 +42,36 @@ internal class AccountAdapter(
         fun bind(item: Item) {
             val account = item.account
             val context = binding.root.context
-            binding.cardItemName.text = account.displayName()
-            binding.cardItemInfo.text = buildString {
-                if (account.cardNo.isNotBlank()) append(account.cardNo)
+            val name = account.displayName()
+            val details = buildList {
+                if (account.cardNo.isNotBlank()) add(account.cardNo)
                 if (account.balance.isNotBlank()) {
-                    if (isNotEmpty()) append("  ")
-                    append(context.getString(R.string.card_balance, account.balance))
+                    add(context.getString(R.string.card_balance, account.balance))
                 }
             }
+            val info = details.joinToString("  ")
+            binding.cardItemName.text = name
+            binding.cardItemInfo.text = info
+            binding.cardItemInfo.visibility = if (info.isEmpty()) View.GONE else View.VISIBLE
             binding.cardItemCurrent.visibility =
                 if (item.current) View.VISIBLE else View.INVISIBLE
+            binding.root.contentDescription = (listOf(name) + details)
+                .joinToString("，")
+            ViewCompat.setStateDescription(
+                binding.root,
+                if (item.current) context.getString(R.string.card_current_state) else null
+            )
+            binding.cardItemMore.contentDescription = context.getString(
+                R.string.card_manage_named,
+                name
+            )
             binding.root.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) onClick(position)
             }
-            binding.root.setOnLongClickListener {
+            binding.cardItemMore.setOnClickListener {
                 val position = bindingAdapterPosition
-                if (position == RecyclerView.NO_POSITION) {
-                    false
-                } else {
-                    onLongClick(position)
-                    true
-                }
+                if (position != RecyclerView.NO_POSITION) onMenuClick(position)
             }
         }
     }

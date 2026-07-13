@@ -8,6 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:gravity="center_vertical"
+    android:minHeight="64dp"
     android:orientation="horizontal"
     android:padding="12dp">
 
@@ -28,6 +29,7 @@
             android:id="@+id/card_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
             android:textColor="@color/card_text"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -38,8 +40,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
+            android:importantForAccessibility="no"
             android:textColor="@color/card_text_hint"
             android:textSize="13sp"
             tools:text="1073325020407  余额 20.00元" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/card_item_more"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/card_bg_icon_button"
+        android:contentDescription="@string/card_manage"
+        android:padding="12dp"
+        android:src="@drawable/card_ic_more" />
 </LinearLayout>

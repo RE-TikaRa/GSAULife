@@ -26,6 +26,9 @@
     <string name="card_rename_title">校园卡备注</string>
     <string name="card_rename_message">备注仅保存在本机，留空时显示校园卡姓名。</string>
     <string name="card_alias_hint">备注名称</string>
+    <string name="card_manage">管理校园卡</string>
+    <string name="card_manage_named">管理 %1$s</string>
+    <string name="card_current_state">当前校园卡</string>
     <string name="card_delete">删除校园卡</string>
     <string name="card_delete_title">删除校园卡</string>
     <string name="card_delete_message">删除“%1$s”？</string>

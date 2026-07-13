@@ -46,7 +46,7 @@ class CardFragment : Fragment() {
         store = AccountStore.get(requireContext())
         adapter = AccountAdapter(
             onClick = ::selectAccount,
-            onLongClick = ::showAccountMenu
+            onMenuClick = ::showAccountMenu
         )
         binding.cardList.layoutManager = LinearLayoutManager(requireContext())
         binding.cardList.adapter = adapter
