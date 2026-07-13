@@ -13,8 +13,11 @@
         android:layout_height="48dp"
         android:background="@drawable/card_bg_name_bar"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="6dp">
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
 
         <FrameLayout
             android:layout_width="0dp"

@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fillViewport="true"
     tools:ignore="UseCompoundDrawables">
 
-    <com.google.android.material.appbar.MaterialToolbar
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurface"
-        android:minHeight="?attr/actionBarSize"
-        app:title="@string/academic_title" />
+        android:orientation="vertical"
+        android:paddingTop="20dp">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:text="@string/academic_title"
+            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+            android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold" />
 
         <androidx.gridlayout.widget.GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
+            android:padding="10dp"
             app:columnCount="2">
 
             <com.google.android.material.card.MaterialCardView
@@ -214,5 +216,5 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </androidx.gridlayout.widget.GridLayout>
-    </ScrollView>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>
