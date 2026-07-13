@@ -30,24 +30,28 @@
                 android:id="@+id/academic_card_grades"
                 style="@style/Widget.Material3.CardView.Elevated"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
+                app:layout_gravity="fill"
                 android:layout_margin="6dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:minHeight="150dp"
                 app:cardCornerRadius="20dp"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:minHeight="150dp"
+                    android:orientation="vertical"
+                    android:paddingVertical="16dp">
 
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:background="@drawable/academic_bg_icon_circle"
-                        android:contentDescription="@string/academic_feature_grades"
+                        android:importantForAccessibility="no"
                         android:padding="15dp"
                         android:src="@drawable/academic_ic_grades"
                         app:tint="?attr/colorOnPrimaryContainer" />
@@ -56,6 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
+                        android:gravity="center"
                         android:text="@string/academic_feature_grades"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
@@ -67,24 +72,28 @@
                 android:id="@+id/academic_card_schedule"
                 style="@style/Widget.Material3.CardView.Elevated"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
+                app:layout_gravity="fill"
                 android:layout_margin="6dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:minHeight="150dp"
                 app:cardCornerRadius="20dp"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:minHeight="150dp"
+                    android:orientation="vertical"
+                    android:paddingVertical="16dp">
 
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:background="@drawable/academic_bg_icon_circle"
-                        android:contentDescription="@string/academic_feature_schedule"
+                        android:importantForAccessibility="no"
                         android:padding="15dp"
                         android:src="@drawable/academic_ic_schedule"
                         app:tint="?attr/colorOnPrimaryContainer" />
@@ -93,6 +102,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
+                        android:gravity="center"
                         android:text="@string/academic_feature_schedule"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
@@ -104,24 +114,28 @@
                 android:id="@+id/academic_card_exams"
                 style="@style/Widget.Material3.CardView.Elevated"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
+                app:layout_gravity="fill"
                 android:layout_margin="6dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:minHeight="150dp"
                 app:cardCornerRadius="20dp"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:minHeight="150dp"
+                    android:orientation="vertical"
+                    android:paddingVertical="16dp">
 
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:background="@drawable/academic_bg_icon_circle"
-                        android:contentDescription="@string/academic_feature_exams"
+                        android:importantForAccessibility="no"
                         android:padding="15dp"
                         android:src="@drawable/academic_ic_exams"
                         app:tint="?attr/colorOnPrimaryContainer" />
@@ -130,6 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
+                        android:gravity="center"
                         android:text="@string/academic_feature_exams"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
@@ -141,24 +156,28 @@
                 android:id="@+id/academic_card_rankings"
                 style="@style/Widget.Material3.CardView.Elevated"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
+                app:layout_gravity="fill"
                 android:layout_margin="6dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:minHeight="150dp"
                 app:cardCornerRadius="20dp"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:minHeight="150dp"
+                    android:orientation="vertical"
+                    android:paddingVertical="16dp">
 
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:background="@drawable/academic_bg_icon_circle"
-                        android:contentDescription="@string/academic_feature_rankings"
+                        android:importantForAccessibility="no"
                         android:padding="15dp"
                         android:src="@drawable/academic_ic_rankings"
                         app:tint="?attr/colorOnPrimaryContainer" />
@@ -167,6 +186,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
+                        android:gravity="center"
                         android:text="@string/academic_feature_rankings"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"

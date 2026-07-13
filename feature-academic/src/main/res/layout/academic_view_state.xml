@@ -8,43 +8,54 @@
         android:id="@+id/academic_state_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:accessibilityLiveRegion="polite"
+        android:contentDescription="@string/academic_state_loading"
         android:layout_gravity="center"
         android:indeterminate="true"
         android:visibility="gone" />
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/academic_state_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingHorizontal="32dp"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingVertical="24dp"
+        android:scrollbars="none"
         android:visibility="gone">
 
-        <ImageView
-            android:id="@+id/academic_state_icon"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:alpha="0.6"
-            app:tint="?attr/colorOnSurfaceVariant"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/academic_state_message"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:gravity="center"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="15sp" />
+            android:orientation="vertical"
+            android:paddingHorizontal="32dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/academic_state_action"
-            style="@style/Widget.Material3.Button.TonalButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:visibility="gone" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/academic_state_icon"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:alpha="0.6"
+                android:importantForAccessibility="no"
+                app:tint="?attr/colorOnSurfaceVariant" />
+
+            <TextView
+                android:id="@+id/academic_state_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:accessibilityLiveRegion="polite"
+                android:gravity="center"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="15sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/academic_state_action"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </merge>

@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
         android:minHeight="?attr/actionBarSize"
+        app:navigationContentDescription="@string/academic_cd_back"
         app:navigationIcon="@drawable/academic_ic_back" />
 
     <include

@@ -12,6 +12,8 @@
     <string name="academic_action_confirm">确定</string>
     <string name="academic_action_set_term_start">设置开学日期</string>
     <string name="academic_action_calibrate_week">校准教学周</string>
+    <string name="academic_cd_back">返回教务首页</string>
+    <string name="academic_state_loading">正在加载</string>
     <string name="academic_state_error">获取失败：%1$s</string>
     <string name="academic_state_logged_out">登录已失效，请重新登录</string>
     <string name="academic_cache_offline">显示本机数据 · 更新于 %1$s</string>
