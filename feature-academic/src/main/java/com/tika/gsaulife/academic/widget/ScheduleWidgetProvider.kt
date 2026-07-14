@@ -61,6 +61,7 @@ abstract class ScheduleWidgetProvider : AppWidgetProvider() {
         listId: Int,
         emptyId: Int,
         mode: String,
+        emptyTextRes: Int,
     ) {
         val serviceIntent = Intent(context, ScheduleWidgetService::class.java).apply {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
@@ -68,18 +69,21 @@ abstract class ScheduleWidgetProvider : AppWidgetProvider() {
             data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
         }
         views.setRemoteAdapter(listId, serviceIntent)
+        views.setTextViewText(emptyId, context.getString(emptyTextRes))
         views.setEmptyView(listId, emptyId)
         views.setPendingIntentTemplate(listId, openAppIntent(context))
     }
 
-    private fun subtitle(context: Context): String {
+    protected open fun subtitle(context: Context): String {
         val cache = AcademicCache.get(context).loadSchedule()
-        val date = DATE_FORMAT.format(Calendar.getInstance().time)
+        val date = dateText()
         if (cache == null) return date
         val week = AcademicSettings.get(context).currentWeek(cache.data.term)
             ?: return date
         return context.getString(R.string.academic_widget_subtitle, date, week)
     }
+
+    protected fun dateText(): String = DATE_FORMAT.format(Calendar.getInstance().time)
 
     private fun openAppIntent(context: Context): PendingIntent {
         val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
@@ -118,6 +122,7 @@ class TodayScheduleWidgetProvider : ScheduleWidgetProvider() {
         bindList(
             context, views, widgetId,
             R.id.academic_widget_list, R.id.academic_widget_empty, MODE_TODAY,
+            R.string.academic_widget_today_free,
         )
     }
 
@@ -138,15 +143,37 @@ class UpcomingScheduleWidgetProvider : ScheduleWidgetProvider() {
         bindList(
             context, views, widgetId,
             R.id.academic_widget_today_list, R.id.academic_widget_today_empty, MODE_TODAY,
+            R.string.academic_widget_day_free,
         )
         bindList(
             context, views, widgetId,
             R.id.academic_widget_tomorrow_list, R.id.academic_widget_tomorrow_empty, MODE_TOMORROW,
+            R.string.academic_widget_day_free,
         )
     }
 
     companion object {
         fun refreshAll(context: Context) =
             refresh(context, UpcomingScheduleWidgetProvider::class.java)
+    }
+}
+
+class ExamScheduleWidgetProvider : ScheduleWidgetProvider() {
+    override val titleRes = R.string.academic_feature_exams
+    override val layoutRes = R.layout.academic_widget_schedule
+    override val listIds = intArrayOf(R.id.academic_widget_list)
+
+    override fun subtitle(context: Context): String = dateText()
+
+    override fun bindContent(context: Context, views: RemoteViews, widgetId: Int) {
+        bindList(
+            context, views, widgetId,
+            R.id.academic_widget_list, R.id.academic_widget_empty, MODE_EXAMS,
+            R.string.academic_exams_empty,
+        )
+    }
+
+    companion object {
+        fun refreshAll(context: Context) = refresh(context, ExamScheduleWidgetProvider::class.java)
     }
 }

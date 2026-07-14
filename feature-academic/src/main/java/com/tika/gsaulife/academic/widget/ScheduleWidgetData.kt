@@ -4,6 +4,7 @@ import android.content.Context
 import com.tika.gsaulife.academic.data.AcademicCache
 import com.tika.gsaulife.academic.data.AcademicSettings
 import com.tika.gsaulife.academic.model.Course
+import com.tika.gsaulife.academic.model.Exam
 import com.tika.gsaulife.academic.model.SectionTime
 import java.util.Calendar
 
@@ -29,6 +30,17 @@ internal object ScheduleWidgetData {
         val tomorrow = if (today == 7) 1 else today + 1
         return ScheduleWidgetDay(tomorrow, dayItems(context, tomorrow, now + DAY_MS, hidePassed = false))
     }
+
+    fun exams(context: Context, now: Long = System.currentTimeMillis()): List<ScheduleWidgetItem> {
+        val cache = AcademicCache.get(context).loadExams() ?: return emptyList()
+        return cache.data.exams
+            .filter { exam -> exam.endTime()?.let { it > now } != false }
+            .sortedBy { it.endTime() ?: Long.MAX_VALUE }
+            .map { ScheduleWidgetItem(it.courseName, it.time, examRoom(it)) }
+    }
+
+    private fun examRoom(exam: Exam): String =
+        listOf(exam.location, exam.seat).filter { it.isNotEmpty() }.joinToString(" · ")
 
     private fun dayItems(
         context: Context,

@@ -10,6 +10,7 @@ import com.tika.gsaulife.academic.R
 const val EXTRA_MODE = "academic.widget.mode"
 const val MODE_TODAY = "today"
 const val MODE_TOMORROW = "tomorrow"
+const val MODE_EXAMS = "exams"
 
 class ScheduleWidgetService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
@@ -28,6 +29,7 @@ private class ScheduleRemoteViewsFactory(
 
     override fun onDataSetChanged() {
         items = when (mode) {
+            MODE_EXAMS -> ScheduleWidgetData.exams(context)
             MODE_TOMORROW -> ScheduleWidgetData.tomorrow(context).items
             else -> ScheduleWidgetData.today(context).items
         }
@@ -35,7 +37,12 @@ private class ScheduleRemoteViewsFactory(
 
     override fun getViewAt(position: Int): RemoteViews {
         val item = items[position]
-        return RemoteViews(context.packageName, R.layout.academic_widget_row).apply {
+        val layout = if (mode == MODE_EXAMS) {
+            R.layout.academic_widget_exam_row
+        } else {
+            R.layout.academic_widget_row
+        }
+        return RemoteViews(context.packageName, layout).apply {
             setTextViewText(R.id.academic_widget_row_name, item.name)
             setTextViewText(R.id.academic_widget_row_time, item.time)
             if (item.room.isEmpty()) {

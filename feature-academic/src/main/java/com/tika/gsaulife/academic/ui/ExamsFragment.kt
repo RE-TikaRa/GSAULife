@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tika.gsaulife.academic.AcademicFeature
 import com.tika.gsaulife.academic.R
 import com.tika.gsaulife.academic.data.AcademicCache
 import com.tika.gsaulife.academic.data.AcademicResult
@@ -85,6 +86,7 @@ internal class ExamsFragment : Fragment(), AcademicPage {
             .mapIndexed { index, exam -> index + 1 to exam }
             .sortedBy { (_, exam) -> (exam.endTime() ?: Long.MAX_VALUE) <= now }
         binding.academicList.adapter = ExamAdapter(ordered)
+        AcademicFeature.refreshWidgets(requireContext())
     }
 
     private fun showLoading() {

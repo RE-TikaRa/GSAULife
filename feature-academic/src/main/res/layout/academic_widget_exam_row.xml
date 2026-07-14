@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/academic_widget_row_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/academic_bg_widget_row"
+    android:orientation="horizontal"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="10dp">
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/academic_widget_row_accent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/academic_widget_row_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/academic_widget_on_surface"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="机械设计基础" />
+
+        <TextView
+            android:id="@+id/academic_widget_row_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/academic_widget_accent"
+            android:textSize="12sp"
+            tools:text="2026-01-15 09:00~11:00" />
+
+        <TextView
+            android:id="@+id/academic_widget_row_room"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/academic_widget_on_surface_variant"
+            android:textSize="12sp"
+            tools:text="工科楼 A301 · 23号" />
+    </LinearLayout>
+</LinearLayout>

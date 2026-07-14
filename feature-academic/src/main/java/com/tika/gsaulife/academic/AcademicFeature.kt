@@ -9,6 +9,7 @@ import com.tika.gsaulife.academic.data.AcademicSettings
 import com.tika.gsaulife.academic.data.SchoolSessionStore
 import com.tika.gsaulife.academic.ui.AcademicRootFragment
 import com.tika.gsaulife.academic.ui.LoginActivity
+import com.tika.gsaulife.academic.widget.ExamScheduleWidgetProvider
 import com.tika.gsaulife.academic.widget.TodayScheduleWidgetProvider
 import com.tika.gsaulife.academic.widget.UpcomingScheduleWidgetProvider
 
@@ -35,6 +36,7 @@ object AcademicFeature {
     fun refreshWidgets(context: Context) {
         TodayScheduleWidgetProvider.refreshAll(context)
         UpcomingScheduleWidgetProvider.refreshAll(context)
+        ExamScheduleWidgetProvider.refreshAll(context)
     }
 
     fun resetToMenu(fragment: Fragment) {
