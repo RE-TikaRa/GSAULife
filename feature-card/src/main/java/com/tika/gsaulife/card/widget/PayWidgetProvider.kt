@@ -94,7 +94,7 @@ class PayWidgetProvider : AppWidgetProvider() {
             views.setViewVisibility(R.id.card_widget_name, View.VISIBLE)
             views.setViewVisibility(R.id.card_widget_switch, View.GONE)
             views.setViewVisibility(R.id.card_widget_qr, View.GONE)
-            views.setViewVisibility(R.id.card_widget_refresh, View.GONE)
+            views.setViewVisibility(R.id.card_widget_refresh, View.INVISIBLE)
             views.setViewVisibility(R.id.card_widget_hint, View.VISIBLE)
             views.setTextViewText(
                 R.id.card_widget_hint,
@@ -124,7 +124,7 @@ class PayWidgetProvider : AppWidgetProvider() {
             views.setViewVisibility(R.id.card_widget_name, View.VISIBLE)
             views.setViewVisibility(R.id.card_widget_switch, View.GONE)
             views.setViewVisibility(R.id.card_widget_qr, View.GONE)
-            views.setViewVisibility(R.id.card_widget_refresh, View.GONE)
+            views.setViewVisibility(R.id.card_widget_refresh, View.INVISIBLE)
             views.setViewVisibility(R.id.card_widget_hint, View.VISIBLE)
             views.setTextViewText(
                 R.id.card_widget_hint,
