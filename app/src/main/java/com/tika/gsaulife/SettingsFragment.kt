@@ -17,7 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.tika.gsaulife.academic.AcademicFeature
-import com.tika.gsaulife.academic.SchoolSystem
 import com.tika.gsaulife.card.CardFeature
 import com.tika.gsaulife.card.RefreshMode
 import com.tika.gsaulife.databinding.FragmentSettingsBinding
@@ -29,11 +28,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var updatingControls = false
     private var pendingUpdateResult: UpdateChecker.Result? = null
 
-    private val academicLogin = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { renderIdentity() }
-
-    private val studentLogin = registerForActivityResult(
+    private val campusLogin = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { renderIdentity() }
 
@@ -45,25 +40,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
 
-        binding.academicLogin.setOnClickListener {
-            academicLogin.launch(
+        binding.campusLogin.setOnClickListener {
+            campusLogin.launch(
                 AcademicFeature.loginIntent(
                     requireContext(),
-                    SchoolSystem.ACADEMIC,
-                    AcademicFeature.isLoggedIn(requireContext(), SchoolSystem.ACADEMIC),
+                    AcademicFeature.isLoggedIn(requireContext()),
                 )
             )
         }
-        binding.studentLogin.setOnClickListener {
-            studentLogin.launch(
-                AcademicFeature.loginIntent(
-                    requireContext(),
-                    SchoolSystem.STUDENT_AFFAIRS,
-                    AcademicFeature.isLoggedIn(requireContext(), SchoolSystem.STUDENT_AFFAIRS),
-                )
-            )
-        }
-        binding.logoutAcademic.setOnClickListener { confirmLogout() }
+        binding.logoutCampus.setOnClickListener { confirmLogout() }
 
         binding.themeGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (!isChecked || updatingControls) return@addOnButtonCheckedListener
@@ -144,21 +129,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun renderIdentity() {
         if (_binding == null) return
-        val academic = AcademicFeature.isLoggedIn(requireContext(), SchoolSystem.ACADEMIC)
-        val student = AcademicFeature.isLoggedIn(requireContext(), SchoolSystem.STUDENT_AFFAIRS)
-        binding.academicStatus.setText(
-            if (academic) R.string.settings_logged_in else R.string.settings_logged_out
+        val loggedIn = AcademicFeature.isLoggedIn(requireContext())
+        binding.campusStatus.setText(
+            if (loggedIn) R.string.settings_logged_in else R.string.settings_logged_out
         )
-        binding.studentStatus.setText(
-            if (student) R.string.settings_logged_in else R.string.settings_logged_out
+        binding.campusLogin.setText(
+            if (loggedIn) R.string.settings_relogin else R.string.settings_login
         )
-        binding.academicLogin.setText(
-            if (academic) R.string.settings_relogin else R.string.settings_login
-        )
-        binding.studentLogin.setText(
-            if (student) R.string.settings_relogin else R.string.settings_login
-        )
-        binding.logoutAcademic.isEnabled = academic || student
+        binding.logoutCampus.isEnabled = loggedIn
     }
 
     private fun renderTheme() {

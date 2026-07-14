@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.tika.gsaulife.academic.R
+import com.tika.gsaulife.academic.SchoolSystem
 import com.tika.gsaulife.academic.data.SchoolSessionStore
 
 class AcademicRootFragment : Fragment(R.layout.academic_fragment_root) {
@@ -72,14 +73,17 @@ class AcademicRootFragment : Fragment(R.layout.academic_fragment_root) {
         }
     }
 
+    private fun fullyLoggedIn(): Boolean =
+        sessions.isLoggedIn(SchoolSystem.ACADEMIC) && sessions.isLoggedIn(SchoolSystem.STUDENT_AFFAIRS)
+
     internal fun open(destination: AcademicDestination) {
-        if (sessions.isLoggedIn(destination.system)) showPage(destination)
+        if (fullyLoggedIn()) showPage(destination)
         else authenticate(destination)
     }
 
     internal fun authenticate(destination: AcademicDestination) {
         pendingDestination = destination
-        loginLauncher.launch(LoginActivity.intent(requireContext(), destination.system))
+        loginLauncher.launch(LoginActivity.intent(requireContext()))
     }
 
     private fun showMenu() {

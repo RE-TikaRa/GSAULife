@@ -12,15 +12,14 @@
     <string name="first_launch_agreement_accept">同意并继续</string>
 
     <string name="settings_title">设置</string>
-    <string name="settings_identity">教务身份</string>
-    <string name="settings_academic_system">教务系统</string>
-    <string name="settings_student_affairs">学工系统</string>
+    <string name="settings_identity">校园身份</string>
+    <string name="settings_campus_login">校园统一登录</string>
     <string name="settings_logged_in">已登录</string>
     <string name="settings_logged_out">未登录</string>
     <string name="settings_login">登录</string>
     <string name="settings_relogin">重新登录</string>
-    <string name="settings_logout">退出教务身份</string>
-    <string name="settings_logout_title">退出教务身份？</string>
+    <string name="settings_logout">退出校园身份</string>
+    <string name="settings_logout_title">退出校园身份？</string>
     <string name="settings_logout_message">两套学校会话与全部教务缓存将被清除。</string>
     <string name="settings_cancel">取消</string>
 

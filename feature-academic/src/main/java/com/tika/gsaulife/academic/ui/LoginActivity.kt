@@ -18,18 +18,20 @@ import com.tika.gsaulife.academic.data.AcademicCache
 import com.tika.gsaulife.academic.data.AcademicHttp
 import com.tika.gsaulife.academic.data.SchoolSessionStore
 import com.tika.gsaulife.academic.databinding.AcademicActivityLoginBinding
+import org.json.JSONObject
 import java.net.URI
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: AcademicActivityLoginBinding
-    private lateinit var system: SchoolSystem
     private val sessions by lazy { SchoolSessionStore.get(this) }
-    private var finishingLogin = false
+    private var step = Step.ACADEMIC
+    private var academicCookies: Map<String, String> = emptyMap()
+
+    private enum class Step { ACADEMIC, STUDENT_AFFAIRS, DONE }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        system = SchoolSystem.valueOf(intent.getStringExtra(EXTRA_SYSTEM)!!)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = AcademicActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -66,16 +68,30 @@ class LoginActivity : AppCompatActivity() {
             if (intent.getBooleanExtra(EXTRA_FORCE_REAUTH, false)) {
                 cookies.removeAllCookies {
                     cookies.flush()
-                    binding.academicWebView.loadUrl(startUrl(system))
+                    binding.academicWebView.loadUrl(SchoolSessionStore.JWGL_BASE)
                 }
             } else {
-                binding.academicWebView.loadUrl(startUrl(system))
+                binding.academicWebView.loadUrl(SchoolSessionStore.JWGL_BASE)
+            }
+        } else {
+            step = Step.entries[savedInstanceState.getInt(STATE_STEP)]
+            savedInstanceState.getString(STATE_ACADEMIC)?.let {
+                val json = JSONObject(it)
+                academicCookies = buildMap {
+                    for (name in json.keys()) put(name, json.getString(name))
+                }
             }
         }
     }
 
     private fun capture(url: String?) {
-        if (finishingLogin || url == null || !reachedTarget(url)) return
+        if (step == Step.DONE || url == null) return
+        val system = when (step) {
+            Step.ACADEMIC -> SchoolSystem.ACADEMIC
+            Step.STUDENT_AFFAIRS -> SchoolSystem.STUDENT_AFFAIRS
+            Step.DONE -> return
+        }
+        if (!reachedSchoolTarget(system, url)) return
         val cookieUrl = when (system) {
             SchoolSystem.ACADEMIC ->
                 "${SchoolSessionStore.JWGL_BASE}/jsxsd/framework/xsMain.jsp"
@@ -83,20 +99,35 @@ class LoginActivity : AppCompatActivity() {
         }
         val cookies = parseCookies(CookieManager.getInstance().getCookie(cookieUrl))
         if (cookies.isEmpty()) return
-        finishingLogin = true
-        sessions.save(system, cookies)
-        AcademicCache.get(this).clear(system)
-        CookieManager.getInstance().flush()
-        setResult(RESULT_OK)
-        finish()
+        when (step) {
+            Step.ACADEMIC -> {
+                academicCookies = cookies
+                step = Step.STUDENT_AFFAIRS
+                binding.academicWebView.loadUrl(XGFW_URL)
+            }
+            Step.STUDENT_AFFAIRS -> {
+                step = Step.DONE
+                sessions.save(SchoolSystem.ACADEMIC, academicCookies)
+                sessions.save(SchoolSystem.STUDENT_AFFAIRS, cookies)
+                val cache = AcademicCache.get(this)
+                cache.clear(SchoolSystem.ACADEMIC)
+                cache.clear(SchoolSystem.STUDENT_AFFAIRS)
+                CookieManager.getInstance().flush()
+                setResult(RESULT_OK)
+                finish()
+            }
+            Step.DONE -> Unit
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         binding.academicWebView.saveState(outState)
+        outState.putInt(STATE_STEP, step.ordinal)
+        if (academicCookies.isNotEmpty()) {
+            outState.putString(STATE_ACADEMIC, JSONObject(academicCookies).toString())
+        }
         super.onSaveInstanceState(outState)
     }
-
-    private fun reachedTarget(url: String): Boolean = reachedSchoolTarget(system, url)
 
     private fun parseCookies(raw: String?): Map<String, String> {
         raw ?: return emptyMap()
@@ -116,20 +147,15 @@ class LoginActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val EXTRA_SYSTEM = "academic.school_system"
         private const val EXTRA_FORCE_REAUTH = "academic.force_reauth"
+        private const val STATE_STEP = "academic.login_step"
+        private const val STATE_ACADEMIC = "academic.login_academic_cookies"
         private const val XGFW_URL =
             "${SchoolSessionStore.XGFW_BASE}/xsfw/sys/jbxxapp/*default/index.do#/wdxx"
 
-        fun intent(context: Context, system: SchoolSystem, forceReauth: Boolean = false): Intent =
+        fun intent(context: Context, forceReauth: Boolean = false): Intent =
             Intent(context, LoginActivity::class.java)
-                .putExtra(EXTRA_SYSTEM, system.name)
                 .putExtra(EXTRA_FORCE_REAUTH, forceReauth)
-
-        private fun startUrl(system: SchoolSystem): String = when (system) {
-            SchoolSystem.ACADEMIC -> SchoolSessionStore.JWGL_BASE
-            SchoolSystem.STUDENT_AFFAIRS -> XGFW_URL
-        }
     }
 }
 

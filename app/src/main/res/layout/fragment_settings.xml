@@ -62,53 +62,16 @@
 
                             <TextView
                                 style="@style/Gsau.Settings.RowTitle"
-                                android:text="@string/settings_academic_system" />
+                                android:text="@string/settings_campus_login" />
 
                             <TextView
-                                android:id="@+id/academicStatus"
+                                android:id="@+id/campusStatus"
                                 style="@style/Gsau.Settings.RowSubtitle"
                                 android:text="@string/settings_logged_out" />
                         </LinearLayout>
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/academicLogin"
-                            style="@style/Widget.Material3.Button.TonalButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minHeight="48dp"
-                            android:text="@string/settings_login" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="?attr/colorOutlineVariant" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:minHeight="64dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/Gsau.Settings.RowTitle"
-                                android:text="@string/settings_student_affairs" />
-
-                            <TextView
-                                android:id="@+id/studentStatus"
-                                style="@style/Gsau.Settings.RowSubtitle"
-                                android:text="@string/settings_logged_out" />
-                        </LinearLayout>
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/studentLogin"
+                            android:id="@+id/campusLogin"
                             style="@style/Widget.Material3.Button.TonalButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -119,7 +82,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/logoutAcademic"
+                android:id="@+id/logoutCampus"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

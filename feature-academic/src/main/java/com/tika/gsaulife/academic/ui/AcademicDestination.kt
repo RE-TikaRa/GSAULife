@@ -1,12 +1,10 @@
 package com.tika.gsaulife.academic.ui
 
-import com.tika.gsaulife.academic.SchoolSystem
-
-internal enum class AcademicDestination(val system: SchoolSystem) {
-    GRADES(SchoolSystem.ACADEMIC),
-    SCHEDULE(SchoolSystem.ACADEMIC),
-    EXAMS(SchoolSystem.ACADEMIC),
-    RANKINGS(SchoolSystem.STUDENT_AFFAIRS),
+internal enum class AcademicDestination {
+    GRADES,
+    SCHEDULE,
+    EXAMS,
+    RANKINGS,
 }
 
 internal interface AcademicPage {

@@ -16,14 +16,13 @@ import com.tika.gsaulife.academic.widget.UpcomingScheduleWidgetProvider
 object AcademicFeature {
     fun createFragment(): Fragment = AcademicRootFragment()
 
-    fun isLoggedIn(context: Context, system: SchoolSystem): Boolean =
-        SchoolSessionStore.get(context).isLoggedIn(system)
+    fun isLoggedIn(context: Context): Boolean {
+        val store = SchoolSessionStore.get(context)
+        return store.isLoggedIn(SchoolSystem.ACADEMIC) && store.isLoggedIn(SchoolSystem.STUDENT_AFFAIRS)
+    }
 
-    fun loginIntent(
-        context: Context,
-        system: SchoolSystem,
-        forceReauth: Boolean = false,
-    ): Intent = LoginActivity.intent(context, system, forceReauth)
+    fun loginIntent(context: Context, forceReauth: Boolean = false): Intent =
+        LoginActivity.intent(context, forceReauth)
 
     fun logoutAll(context: Context) {
         SchoolSessionStore.get(context).clearAll()
