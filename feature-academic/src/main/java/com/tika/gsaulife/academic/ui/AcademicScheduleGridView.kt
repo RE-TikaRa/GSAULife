@@ -8,8 +8,10 @@ import android.graphics.RectF
 import android.os.Bundle
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Button
 import androidx.core.view.ViewCompat
@@ -19,6 +21,7 @@ import com.google.android.material.R as MaterialR
 import com.google.android.material.color.MaterialColors
 import com.tika.gsaulife.academic.R
 import com.tika.gsaulife.academic.model.Course
+import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -27,10 +30,37 @@ class AcademicScheduleGridView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
 ) : View(context, attrs) {
     var onCourseClick: ((Course) -> Unit)? = null
+    var onSwipeWeek: ((Int) -> Unit)? = null
 
     private var courses: List<Course> = emptyList()
     private var pressedCourse = ExploreByTouchHelper.INVALID_ID
+    private var swiped = false
+    private var downX = 0f
+    private var downY = 0f
+    private var dragging = false
     private val density = resources.displayMetrics.density
+    private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+    private val swipeDetector = GestureDetector(
+        context,
+        object : GestureDetector.SimpleOnGestureListener() {
+            override fun onFling(
+                e1: MotionEvent?,
+                e2: MotionEvent,
+                velocityX: Float,
+                velocityY: Float,
+            ): Boolean {
+                val start = e1 ?: return false
+                if (abs(velocityX) < abs(velocityY) || abs(velocityX) < minFlingVelocity) {
+                    return false
+                }
+                if (abs(e2.x - start.x) < abs(e2.y - start.y)) return false
+                onSwipeWeek?.invoke(if (velocityX < 0) 1 else -1) ?: return false
+                swiped = true
+                return true
+            }
+        },
+    )
+    private val minFlingVelocity = 220f * density
 
     private fun themeColor(attribute: Int): Int = MaterialColors.getColor(this, attribute)
     private fun sp(value: Float): Float = TypedValue.applyDimension(
@@ -221,16 +251,39 @@ class AcademicScheduleGridView @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        swipeDetector.onTouchEvent(event)
         return when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
+                swiped = false
+                dragging = false
+                downX = event.x
+                downY = event.y
                 pressedCourse = courseAt(event.x, event.y)
-                pressedCourse != ExploreByTouchHelper.INVALID_ID
+                true
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                if (!dragging) {
+                    val dx = event.x - downX
+                    val dy = event.y - downY
+                    if (abs(dx) > touchSlop && abs(dx) > abs(dy)) {
+                        dragging = true
+                        pressedCourse = ExploreByTouchHelper.INVALID_ID
+                        parent?.requestDisallowInterceptTouchEvent(true)
+                    } else if (abs(dy) > touchSlop) {
+                        parent?.requestDisallowInterceptTouchEvent(false)
+                        pressedCourse = ExploreByTouchHelper.INVALID_ID
+                    }
+                }
+                true
             }
 
             MotionEvent.ACTION_UP -> {
                 val virtualViewId = pressedCourse
                 pressedCourse = ExploreByTouchHelper.INVALID_ID
                 if (
+                    !swiped &&
+                    !dragging &&
                     virtualViewId != ExploreByTouchHelper.INVALID_ID &&
                     courseAt(event.x, event.y) == virtualViewId &&
                     activateCourse(virtualViewId)
@@ -245,7 +298,7 @@ class AcademicScheduleGridView @JvmOverloads constructor(
                 true
             }
 
-            else -> pressedCourse != ExploreByTouchHelper.INVALID_ID
+            else -> true
         }
     }
 

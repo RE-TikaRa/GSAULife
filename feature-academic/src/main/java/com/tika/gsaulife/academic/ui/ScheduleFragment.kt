@@ -81,6 +81,8 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
             }
         }
         binding.academicScheduleGrid.onCourseClick = ::showCourseDetail
+        binding.academicScheduleGrid.onSwipeWeek = ::swipeWeek
+        binding.academicToolbar.setOnClickListener { showWeekJump() }
         binding.academicWeekList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         updateTitle()
@@ -142,12 +144,59 @@ internal class ScheduleFragment : Fragment(), AcademicPage {
         updateTitle()
     }
 
-    private fun selectWeek(week: Int) {
+    private fun selectWeek(week: Int, scrollToWeek: Boolean = false) {
         if (week == selectedWeek) return
         selectedWeek = week
         (binding.academicWeekList.adapter as? WeekAdapter)?.select(week)
+        if (scrollToWeek) binding.academicWeekList.smoothScrollToPosition(week - 1)
         renderWeek()
         updateTitle()
+    }
+
+    private fun swipeWeek(delta: Int) {
+        if (courses.isEmpty()) return
+        selectWeek((selectedWeek + delta).coerceIn(1, maxWeek), scrollToWeek = true)
+    }
+
+    private fun showWeekJump() {
+        if (term.isEmpty() || courses.isEmpty()) return
+        val input = EditText(requireContext()).apply {
+            inputType = InputType.TYPE_CLASS_NUMBER
+            setText(getString(R.string.academic_number, selectedWeek))
+            selectAll()
+            maxLines = 1
+        }
+        val padding = (20 * resources.displayMetrics.density).toInt()
+        val container = FrameLayout(requireContext()).apply {
+            setPadding(padding, 0, padding, 0)
+            addView(
+                input,
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                ),
+            )
+        }
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.academic_schedule_jump_title)
+            .setView(container)
+            .setPositiveButton(R.string.academic_action_confirm, null)
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
+        dialog.setOnShowListener {
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                val week = input.text.toString().toIntOrNull()
+                if (week == null || week !in 1..maxWeek) {
+                    input.error = getString(R.string.academic_schedule_jump_error, maxWeek)
+                    return@setOnClickListener
+                }
+                selectWeek(week, scrollToWeek = true)
+                dialog.dismiss()
+            }
+            input.requestFocus()
+            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        }
+        dialog.show()
     }
 
     private fun renderWeek() {
